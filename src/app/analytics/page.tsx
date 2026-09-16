@@ -52,7 +52,7 @@ export default function AnalyticsPage() {
             <span>Time-Series Sentiment Intelligence & Recovered Margin Hub</span>
           </div>
           <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
-            Zaman Serisi Duygu Analitiği & Kurtarılan Ciro (ROI)
+            Müşteri Memnuniyeti Trendi & Kurtarılan Ciro (ROI)
           </h1>
           <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
             Müşteri incelemelerindeki 6 aylık duygu değişimini izleyin. Ar-Ge ve fabrika revizyonları sonrasında iade oranı düşüşünün sağladığı net finansal kazancı (ROI) kohort bazında kanıtlayın.

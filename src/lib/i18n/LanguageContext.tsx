@@ -45,7 +45,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
   tr: {
     nav: {
       dashboard: 'Yönetici Paneli',
-      analytics: 'Duygu & Ciro Analitiği',
+      analytics: 'Memnuniyet & Gelir Analitiği',
       alerts: 'Kriz Tespit Radarı',
       catalog: 'Ürün & Kusur Kataloğu',
       competitors: 'Rakip Kıyaslama',
