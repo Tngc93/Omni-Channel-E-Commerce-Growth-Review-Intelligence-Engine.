@@ -5,9 +5,9 @@ export async function GET() {
   try {
     const products = await prisma.product.findMany({
       include: { insights: true, reviews: true, hypotheses: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { returnRate: 'desc' },
     });
-    return NextResponse.json({ products });
+    return NextResponse.json(products);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
