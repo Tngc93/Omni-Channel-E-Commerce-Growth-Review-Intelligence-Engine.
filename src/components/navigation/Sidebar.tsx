@@ -16,12 +16,16 @@ import {
   Laptop,
   Shirt,
   Sparkles,
-  Coffee
+  TrendingUp,
+  BellRing,
+  Coffee,
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
 const NAV_ITEMS = [
   { label: 'Executive Dashboard', href: '/', icon: LayoutDashboard },
+  { label: 'Sentiment & ROI Analytics', href: '/analytics', icon: TrendingUp },
+  { label: 'Defect Spike Crisis Radar', href: '/alerts', icon: BellRing },
   { label: 'Catalog & Chronic Defects', href: '/products', icon: ShoppingBag },
   { label: 'Competitor Benchmark', href: '/competitors', icon: Swords },
   { label: 'Growth & A/B Lab', href: '/hypotheses', icon: Lightbulb },
