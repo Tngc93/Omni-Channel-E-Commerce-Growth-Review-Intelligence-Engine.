@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   ShoppingBag,
+  Swords,
   Lightbulb,
   MessageSquareQuote,
   UploadCloud,
@@ -20,6 +21,7 @@ import { cn } from '@/lib/utils/cn';
 const NAV_ITEMS = [
   { label: 'Executive Dashboard', href: '/', icon: LayoutDashboard },
   { label: 'Catalog & Chronic Defects', href: '/products', icon: ShoppingBag },
+  { label: 'Competitor Benchmark', href: '/competitors', icon: Swords },
   { label: 'Growth & A/B Lab', href: '/hypotheses', icon: Lightbulb },
   { label: 'Multi-Persona Chat', href: '/persona-chat', icon: MessageSquareQuote },
   { label: 'Review Ingestion & Add Product', href: '/import', icon: UploadCloud },
