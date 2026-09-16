@@ -1,15 +1,16 @@
 export type AspectCategory =
-  | 'thermals'     // Isınma, Fan Sesi, Throttling
-  | 'display'      // Işık Sızması, Ölü Piksel, Ghosting, Hz
-  | 'build'        // Kasa Kalitesi, Menteşe, Tuş Takımı, Esneme
-  | 'software'     // BIOS, MUX Switch, Sürücü, Control Center
-  | 'power'        // Batarya, Adaptör, Şarj
-  | 'service'      // Garanti, Teknik Servis, Ömür Boyu Bakım
-  | 'fit'          // Tekstil / Boyut / Ergonomi
-  | 'quality'      // Genel Malzeme & Dayanıklılık
-  | 'shipping'     // Kargo & Kutu Hasarı
-  | 'price'        // Fiyat / Performans
-  | 'usability'    // Kurulum & Kullanım Kolaylığı
+  | 'fit'          // Sizing, Cut, Shoulders, Taper
+  | 'thermals'     // Heat, Fan Noise, Throttling
+  | 'display'      // Screen, Panel Glow, Dead Pixels, Refresh Rate
+  | 'formula'      // Skin reaction, Retinol, Scent, Texture
+  | 'durability'   // Gasket, Portafilter, Hardware build, Wear
+  | 'software'     // Drivers, BIOS, App crashes
+  | 'power'        // Battery, Charger brick, Power delivery
+  | 'shipping'     // Transit impact, Broken glass, Crushed box
+  | 'quality'      // General craftsmanship & materials
+  | 'price'        // Price-to-value ratio
+  | 'usability'    // Manual, setup clarity, interface
+  | 'service'      // Warranty, returns, support responsiveness
   | 'general';
 
 export type SentimentType = 'positive' | 'neutral' | 'negative';

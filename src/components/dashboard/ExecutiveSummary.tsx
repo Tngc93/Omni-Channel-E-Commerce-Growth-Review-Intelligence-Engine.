@@ -68,7 +68,7 @@ export function ExecutiveSummary({
           {totalReviewsAnalyzed} Doğrulanmış
         </div>
         <p className="mt-1 text-xs text-slate-400">
-          Monster Web, Trendyol, Hepsiburada, Amazon TR
+          Shopify, Amazon Global, Trendyol, Hepsiburada
         </p>
       </Card>
 

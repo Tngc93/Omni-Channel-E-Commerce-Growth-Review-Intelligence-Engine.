@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db/prisma';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { formatCurrency, formatPercent } from '@/lib/utils/formatters';
-import { ArrowRight, AlertCircle, Cpu, Flame, Monitor, Headphones } from 'lucide-react';
+import { ArrowRight, AlertCircle, Cpu, Flame, Shirt, Sparkles, Coffee, Package } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,25 +19,44 @@ export default async function ProductsCatalogPage() {
   });
 
   const getCategoryIcon = (cat: string) => {
-    if (cat.includes('Laptop')) return <Flame className="h-5 w-5 text-rose-400" />;
-    if (cat.includes('Monitör')) return <Monitor className="h-5 w-5 text-cyan-400" />;
-    if (cat.includes('Masaüstü')) return <Cpu className="h-5 w-5 text-purple-400" />;
-    return <Headphones className="h-5 w-5 text-amber-400" />;
+    const c = cat.toLowerCase();
+    if (c.includes('tech') || c.includes('elektronik') || c.includes('laptop')) {
+      return <Cpu className="h-5 w-5 text-cyan-400" />;
+    }
+    if (c.includes('fashion') || c.includes('apparel') || c.includes('giyim') || c.includes('moda')) {
+      return <Shirt className="h-5 w-5 text-purple-400" />;
+    }
+    if (c.includes('beauty') || c.includes('skincare') || c.includes('kozmetik')) {
+      return <Sparkles className="h-5 w-5 text-emerald-400" />;
+    }
+    if (c.includes('home') || c.includes('kitchen') || c.includes('mutfak') || c.includes('espresso')) {
+      return <Coffee className="h-5 w-5 text-amber-400" />;
+    }
+    return <Package className="h-5 w-5 text-slate-400" />;
+  };
+
+  const getCategoryBadgeVariant = (cat: string) => {
+    const c = cat.toLowerCase();
+    if (c.includes('tech')) return 'cyan';
+    if (c.includes('fashion')) return 'purple';
+    if (c.includes('beauty')) return 'success';
+    if (c.includes('home')) return 'warning';
+    return 'default';
   };
 
   return (
     <div className="space-y-8 apple-bg-glow">
       <div>
         <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-400">
-          <span>Monster Hardware Catalog</span>
+          <span>Omni-Channel Multi-Vertical Catalog</span>
           <span>•</span>
-          <span className="text-slate-400">SKU Zafiyet Değerlendirmesi</span>
+          <span className="text-slate-400">Çoklu Sektör Kalite & İade Analizi</span>
         </div>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-          Donanım & Ekipman Kataloğu
+          Çok Sektörlü Ürün & Kusur Kataloğu
         </h1>
-        <p className="mt-1 text-xs sm:text-sm text-slate-400 max-w-2xl">
-          Oyun laptopları, yüksek yenileme hızlı monitörler, masaüstü canavarları ve çevre birimlerinde tespit edilen kronik kusurları ve Ar-Ge hipotezlerini inceleyin.
+        <p className="mt-1 text-xs sm:text-sm text-slate-400 max-w-3xl">
+          Tüketici elektroniği, moda/tekstil, kozmetik ve ev aletlerinde tespit edilen kronik kusurları, finansal kayıpları ve Ar-Ge büyüme hipotezlerini inceleyin.
         </p>
       </div>
 
@@ -56,7 +75,7 @@ export default async function ProductsCatalogPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <Badge variant="cyan">{p.category}</Badge>
+                        <Badge variant={getCategoryBadgeVariant(p.category) as any}>{p.category}</Badge>
                         <span className="text-[11px] text-slate-500 font-mono">SKU: {p.sku}</span>
                       </div>
                       <h3 className="mt-1.5 text-base font-semibold text-white leading-snug">{p.name}</h3>
@@ -70,11 +89,11 @@ export default async function ProductsCatalogPage() {
 
                 <div className="mt-5 grid grid-cols-2 gap-3 rounded-xl bg-white/[0.02] border border-white/[0.06] p-3 text-xs">
                   <div>
-                    <span className="text-slate-400">Satış Fiyatı:</span>
+                    <span className="text-slate-400">Birim Fiyat:</span>
                     <p className="font-semibold text-white font-mono text-sm mt-0.5">{formatCurrency(p.price)}</p>
                   </div>
                   <div>
-                    <span className="text-slate-400">Aylık Marj Sızıntısı:</span>
+                    <span className="text-slate-400">Aylık Ciro Sızıntısı:</span>
                     <p className="font-semibold text-rose-400 font-mono text-sm mt-0.5">{formatCurrency(loss)}</p>
                   </div>
                 </div>
@@ -98,7 +117,8 @@ export default async function ProductsCatalogPage() {
                   href={`/products/${p.id}`}
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
                 >
-                  Modeli İncele <ArrowRight className="h-3.5 w-3.5" />
+                  Detaylı İnceleme
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             </Card>

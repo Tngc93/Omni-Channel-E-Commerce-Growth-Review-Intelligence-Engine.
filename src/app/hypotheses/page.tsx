@@ -20,10 +20,10 @@ export default async function HypothesesPage() {
           <span>Product Management & Growth Lab</span>
         </div>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-          Donanım Büyüme & A/B Deney Laboratuvarı
+          E-Ticaret Büyüme & A/B Deney Laboratuvarı
         </h1>
         <p className="mt-1 text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
-          Laptop ısınması, monitör ölü piksel güvencesi ve kargo şokunu önlemek için müşteri şikayetlerinden otomatik türetilen A/B test hipotezleri ve Gherkin kabul kriterleri.
+          Tüketici elektroniği, moda kalıp iadeleri, kozmetik ambalaj sızıntıları ve ev aletlerinde müşteri şikayetlerinden otomatik türetilen A/B test hipotezleri ve Gherkin kabul kriterleri.
         </p>
       </div>
 
@@ -42,7 +42,7 @@ export default async function HypothesesPage() {
                   </Badge>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-bold text-white">{h.title}</h3>
+                <h3 className="text-base sm:lg font-bold text-white">{h.title}</h3>
 
                 <div className="rounded-xl bg-black/40 p-3.5 text-xs border border-white/[0.08] space-y-2">
                   <div>

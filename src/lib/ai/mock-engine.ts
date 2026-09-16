@@ -8,10 +8,10 @@ export class MockAiEngine {
     let sentimentScore = 0.0;
     if (rating >= 4) {
       sentiment = 'positive';
-      sentimentScore = 0.8 + (rating === 5 ? 0.18 : 0.0);
+      sentimentScore = 0.82 + (rating === 5 ? 0.16 : 0.0);
     } else if (rating <= 2) {
       sentiment = 'negative';
-      sentimentScore = -0.75 - (rating === 1 ? 0.2 : 0.0);
+      sentimentScore = -0.78 - (rating === 1 ? 0.2 : 0.0);
     }
 
     const aspects: Array<{
@@ -22,140 +22,182 @@ export class MockAiEngine {
       extractedPhrase: string;
     }> = [];
 
-    // 1. Hardware: Thermals & Fan Noise
+    // 1. Fashion / Sizing / Fit
+    if (
+      lower.includes('size') ||
+      lower.includes('beden') ||
+      lower.includes('kalıp') ||
+      lower.includes('omuz') ||
+      lower.includes('dar') ||
+      lower.includes('tight') ||
+      lower.includes('chest') ||
+      lower.includes('small') ||
+      lower.includes('large')
+    ) {
+      const isNeg = lower.includes('dar') || lower.includes('tight') || lower.includes('small') || lower.includes('küçük') || lower.includes('yanıltıcı');
+      aspects.push({
+        aspect: 'fit',
+        sentiment: isNeg ? 'negative' : 'positive',
+        score: isNeg ? -0.88 : 0.85,
+        confidence: 0.95,
+        extractedPhrase: 'beden ve kalıp uyumu',
+      });
+    }
+
+    // 2. Tech / Thermals & Acoustic
     if (
       lower.includes('ısın') ||
-      lower.includes('sicak') ||
-      lower.includes('sıcak') ||
       lower.includes('fan') ||
+      lower.includes('ses') ||
       lower.includes('thermal') ||
       lower.includes('heat') ||
       lower.includes('throttle') ||
       lower.includes('gürültü') ||
-      lower.includes('ses') ||
-      lower.includes('derece')
+      lower.includes('94') ||
+      lower.includes('96')
     ) {
-      const isNeg = lower.includes('fazla') || lower.includes('uçak') || lower.includes('yanıyor') || lower.includes('drop') || lower.includes('throttle') || lower.includes('yüksek');
+      const isNeg = lower.includes('fazla') || lower.includes('uçak') || lower.includes('yanıyor') || lower.includes('throttle') || lower.includes('yüksek') || lower.includes('rahatsız') || lower.includes('iade');
       aspects.push({
         aspect: 'thermals',
         sentiment: isNeg ? 'negative' : 'positive',
-        score: isNeg ? -0.9 : 0.85,
+        score: isNeg ? -0.92 : 0.85,
         confidence: 0.96,
         extractedPhrase: 'termal performans ve fan akustiği',
       });
     }
 
-    // 2. Hardware: Display & Panel
+    // 3. Tech / Display & Panel
     if (
       lower.includes('ekran') ||
       lower.includes('panel') ||
+      lower.includes('ips') ||
+      lower.includes('glow') ||
       lower.includes('piksel') ||
       lower.includes('pixel') ||
-      lower.includes('ışık sız') ||
-      lower.includes('glow') ||
-      lower.includes('ghosting') ||
+      lower.includes('monitör') ||
+      lower.includes('oled') ||
       lower.includes('hz') ||
-      lower.includes('renk')
+      lower.includes('ışık sız')
     ) {
-      const isNeg = lower.includes('ölü') || lower.includes('sızma') || lower.includes('ghosting') || lower.includes('kötü') || lower.includes('soluk');
+      const isNeg = lower.includes('sarı') || lower.includes('sız') || lower.includes('ölü') || lower.includes('flicker') || lower.includes('kusur');
       aspects.push({
         aspect: 'display',
         sentiment: isNeg ? 'negative' : 'positive',
-        score: isNeg ? -0.88 : 0.9,
-        confidence: 0.95,
-        extractedPhrase: 'panel ve görüntü kalitesi',
+        score: isNeg ? -0.89 : 0.88,
+        confidence: 0.94,
+        extractedPhrase: 'ekran paneli ve piksel doğruluğu',
       });
     }
 
-    // 3. Hardware: Build & Chassis
+    // 4. Tech / Software & Firmware & BIOS
     if (
-      lower.includes('kasa') ||
-      lower.includes('menteşe') ||
-      lower.includes('hinge') ||
-      lower.includes('plastik') ||
-      lower.includes('tuş') ||
-      lower.includes('klavye') ||
-      lower.includes('esneme') ||
-      lower.includes('gıcırtı')
-    ) {
-      const isNeg = lower.includes('kırık') || lower.includes('esniyor') || lower.includes('kalitesiz') || lower.includes('gıcırd') || lower.includes('sert');
-      aspects.push({
-        aspect: 'build',
-        sentiment: isNeg ? 'negative' : 'positive',
-        score: isNeg ? -0.82 : 0.8,
-        confidence: 0.92,
-        extractedPhrase: 'kasa mekaniği ve malzeme kalitesi',
-      });
-    }
-
-    // 4. Hardware: Software & BIOS
-    if (
-      lower.includes('bios') ||
+      lower.includes('yazılım') ||
       lower.includes('driver') ||
       lower.includes('sürücü') ||
-      lower.includes('control center') ||
+      lower.includes('bios') ||
       lower.includes('mux') ||
+      lower.includes('çök') ||
       lower.includes('mavi ekran') ||
       lower.includes('bsod') ||
-      lower.includes('çök') ||
-      lower.includes('fps')
+      lower.includes('control center')
     ) {
-      const isNeg = lower.includes('çök') || lower.includes('mavi') || lower.includes('hata') || lower.includes('açılmıyor') || lower.includes('düşük');
+      const isNeg = lower.includes('çök') || lower.includes('hata') || lower.includes('mavi') || lower.includes('kilitlen') || lower.includes('sorun');
       aspects.push({
         aspect: 'software',
         sentiment: isNeg ? 'negative' : 'positive',
-        score: isNeg ? -0.85 : 0.85,
-        confidence: 0.93,
-        extractedPhrase: 'yazılım ve BIOS kararlılığı',
+        score: isNeg ? -0.86 : 0.82,
+        confidence: 0.92,
+        extractedPhrase: 'yazılım kararlılığı ve sürücüler',
       });
     }
 
-    // 5. Hardware: Battery & Power
+    // 5. Beauty / Formula / Skin
     if (
-      lower.includes('pil') ||
-      lower.includes('batarya') ||
-      lower.includes('şarj') ||
-      lower.includes('adaptör') ||
-      lower.includes('battery') ||
-      lower.includes('power')
+      lower.includes('serum') ||
+      lower.includes('cilt') ||
+      lower.includes('tahriş') ||
+      lower.includes('irritat') ||
+      lower.includes('retinol') ||
+      lower.includes('koku') ||
+      lower.includes('sivilce') ||
+      lower.includes('alerji')
     ) {
-      const isNeg = lower.includes('bitiyor') || lower.includes('yetmiyor') || lower.includes('ısındı') || lower.includes('hızlı');
+      const isNeg = lower.includes('tahriş') || lower.includes('alerji') || lower.includes('kızardı') || lower.includes('kötü') || lower.includes('yakıyor');
       aspects.push({
-        aspect: 'power',
+        aspect: 'formula',
         sentiment: isNeg ? 'negative' : 'positive',
-        score: isNeg ? -0.8 : 0.8,
-        confidence: 0.9,
-        extractedPhrase: 'güç ve batarya ömrü',
+        score: isNeg ? -0.85 : 0.92,
+        confidence: 0.94,
+        extractedPhrase: 'cilt reaksiyonu ve formül etkisi',
       });
     }
 
-    // 6. Service & Maintenance
+    // 6. Home / Appliance / Durability / Leaks
+    if (
+      lower.includes('sız') ||
+      lower.includes('conta') ||
+      lower.includes('basınç') ||
+      lower.includes('leak') ||
+      lower.includes('gasket') ||
+      lower.includes('damlat') ||
+      lower.includes('espresso') ||
+      lower.includes('buhar')
+    ) {
+      const isNeg = lower.includes('sızdır') || lower.includes('damlat') || lower.includes('gevşek') || lower.includes('bozuldu');
+      aspects.push({
+        aspect: 'durability',
+        sentiment: isNeg ? 'negative' : 'positive',
+        score: isNeg ? -0.87 : 0.88,
+        confidence: 0.93,
+        extractedPhrase: 'mekanik sızdırmazlık ve conta dayanıklılığı',
+      });
+    }
+
+    // 7. Shipping & Packaging
+    if (
+      lower.includes('kargo') ||
+      lower.includes('paket') ||
+      lower.includes('kırık') ||
+      lower.includes('kutu') ||
+      lower.includes('damlalık') ||
+      lower.includes('dropper') ||
+      lower.includes('darbe')
+    ) {
+      const isNeg = lower.includes('kırık') || lower.includes('akmış') || lower.includes('ezik') || lower.includes('hasar') || lower.includes('parçalan');
+      aspects.push({
+        aspect: 'shipping',
+        sentiment: isNeg ? 'negative' : 'positive',
+        score: isNeg ? -0.89 : 0.8,
+        confidence: 0.91,
+        extractedPhrase: 'kargo ve koruyucu ambalaj durumu',
+      });
+    }
+
+    // 8. Service & Warranty
     if (
       lower.includes('servis') ||
-      lower.includes('bakım') ||
       lower.includes('garanti') ||
-      lower.includes('termal macun') ||
-      lower.includes('teknik') ||
-      lower.includes('destek')
+      lower.includes('bakım') ||
+      lower.includes('destek') ||
+      lower.includes('müşteri hizmetleri')
     ) {
-      const isNeg = lower.includes('geç') || lower.includes('ilgisiz') || lower.includes('çizik') || lower.includes('çözmedi');
+      const isPos = lower.includes('harika') || lower.includes('iyi') || lower.includes('hızlı') || lower.includes('ücretsiz');
       aspects.push({
         aspect: 'service',
-        sentiment: isNeg ? 'negative' : 'positive',
-        score: isNeg ? -0.75 : 0.92,
-        confidence: 0.91,
-        extractedPhrase: 'teknik servis ve bakım deneyimi',
+        sentiment: isPos ? 'positive' : 'negative',
+        score: isPos ? 0.9 : -0.85,
+        confidence: 0.92,
+        extractedPhrase: 'müşteri hizmetleri ve servis desteği',
       });
     }
 
-    // Fallback if no specific tech aspect triggered
     if (aspects.length === 0) {
       aspects.push({
         aspect: 'quality',
         sentiment,
         score: sentimentScore,
         confidence: 0.75,
-        extractedPhrase: 'genel ürün değerlendirmesi',
+        extractedPhrase: 'genel ürün kalite değerlendirmesi',
       });
     }
 
@@ -170,23 +212,32 @@ export class MockAiEngine {
 
   static generateHypothesis(productName: string, topDefect: string, returnRate: number): GeneratedHypothesis {
     return {
-      title: `${productName} İçin AI Destekli Donanım & PDP Optimizasyonu`,
-      problemStatement: `%${returnRate} iade oranına yol açan kronik "${topDefect}" şikayetleri müşteri kaybına ve yüksek kargo/servis maliyetine sebep oluyor.`,
-      hypothesis: `Ürün sayfasına (PDP) donanım performans simülatörü, ses/fan modu kılavuzu ve kutu içerisine hızlı optimizasyon rehberi eklenmesi, donanım kaynaklı iadeleri %30 azaltacaktır.`,
-      expectedMetricImpact: `-%6.2 İade Oranı, +$14,500/Ay Korunan Marj`,
-      testType: 'PDP UX / Donanım Simülatörü & Kılavuz',
-      gherkinSpec: `Feature: Donanım Performans & Fan Kılavuzu\n  Kullanıcı oyun laptopu veya monitör incelerken\n  Gerçek yük altındaki sıcaklık ve fan desibel değerlerini görmeli\n  Böylece beklenti uyuşmazlığı kaynaklı iadeler önlenmeli.\n\n  Scenario: Kullanıcı fan profili simülasyonunu test eder\n    Given Kullanıcı ${productName} ürün sayfasındadır\n    When "Ofis / Oyun / Turbo Fan Modu" simülasyonunu seçtiğinde\n    Then Desibel (dB) ve sıcaklık grafiği canlı olarak güncellenir\n    And "Monster Control Center ile Tek Tıkla Sessiz Mod" ipucu gösterilir.`,
+      title: `${productName} İçin Çok Kanallı Büyüme & İade Azaltma Hipotezi`,
+      problemStatement: `%${returnRate} iade oranına sebep olan kronik "${topDefect}" şikayetleri doğrudan ciro ve kargo marj kaybı oluşturuyor.`,
+      hypothesis: `Ürün sayfasına interaktif seçim kılavuzu, net tolerans/boyut yönergeleri ve kutulama iyileştirmesi eklenmesi, beklenti uyuşmazlığı kaynaklı iadeleri en az %28 oranında düşürecektir.`,
+      expectedMetricImpact: `-%5.4 İade Oranı, +$18,200/Ay Korunan Net Kâr`,
+      testType: 'PDP UX / İnteraktif Kılavuz & Paketleme',
+      gherkinSpec: `Feature: Müşteri Beklenti & İade Önleme Optimizasyonu\n  As an e-commerce customer\n  I want clear pre-purchase guidance on ${productName}\n  So that I make the right purchase decision on first attempt.\n\n  Scenario: Müşteri ürün sayfasında detaylı inceleme yapar\n    Given Kullanıcı ürün detay sayfasındadır\n    When Kritik özellik ve boyut kılavuzunu incelediğinde\n    Then Dinamik öneri motoru kişiselleştirilmiş seçim önerisi sunar\n    And Olası uyumsuzluk riski %75 oranında engellenir.`,
     };
   }
 
   static simulatePersonaResponse(userMessage: string, customerContext: string): string {
     const lower = userMessage.toLowerCase();
-    if (lower.includes('fan') || lower.includes('ısın') || lower.includes('sıcak') || lower.includes('ses')) {
-      return `Bak dostum, Tulpar'ı aldığımda oyun performansı harikaydı ama Cyberpunk açınca fanlar 58 dB'ye fırlıyor, yan odadan duyuluyor! Eğer ürün sayfasına "Ofis modunda 25 dB fısıltı sessizliğinde, Turbo modunda kulaklıkla oynanması önerilir" uyarısı koysaydınız iade etmezdim.`;
+    const contextLower = customerContext.toLowerCase();
+
+    if (contextLower.includes('blazer') || contextLower.includes('giyim') || contextLower.includes('tekstil')) {
+      return `Beden tablonuzda Medium için omuz genişliği 44 cm yazıyordu ama ceket omuzlarıma yapıştı, kollarımı kaldıramadım. Eğer 'Kalıbımız İtalyan Slim kesimdir, rahat giyim için 1 beden büyük tercih ediniz' uyarısı olsaydı doğrudan Large sipariş ederdim ve iadeyle uğraşmazdım.`;
     }
-    if (lower.includes('ekran') || lower.includes('monitör') || lower.includes('piksel')) {
-      return `Aryond monitörde 165Hz akıcılık çok iyi ama karanlık sahnelerde sol alt köşeden sarı ışık sızması (IPS glow) var. Kutuyu açtığımda ölü piksel testini servis garantili yapabileceğimi belirten bir karekod olsaydı servise danışırdım, doğrudan iade butonuna basmazdım.`;
+
+    if (contextLower.includes('serum') || contextLower.includes('kozmetik') || contextLower.includes('cilt')) {
+      return `Serumun formülü ve cildime etkisi harikaydı ancak cam damlalık kargoda çatlamış ve yarısı zarfa dökülmüştü. Cam pipet yerine hava temassız pompalı şişeye (airless pump) geçseniz hem formül oksitlenmez hem de kargoda dökülme riski sıfıra iner.`;
     }
-    return `Monster cihazları güçlü ama beklenti yönetimi çok önemli. Kutu içerisindeki Control Center rehberini daha belirgin yaparsanız müşteriler gereksiz yere iade sürecine girmez.`;
+
+    if (contextLower.includes('espresso') || contextLower.includes('kahve') || contextLower.includes('ev')) {
+      return `Makinenin basıncı ve kahve lezzeti çok iyi fakat portafiltre contası 15 bar basınç altında yandan kahve damlatıyor. Kutu içine yedek gıda uyumlu silikon conta ve contanın nasıl oturtulacağını gösteren bir QR video koysaydınız iade etmezdim.`;
+    }
+
+    // Default to Consumer Tech
+    return `Laptopun işlemci ve ekran performansı canavar gibi ama Turbo moda aldığım an fanlar 56 dB ile yan odadan duyuluyor. Ürün sayfasına 'Ofis Modunda 24dB sessizliğinde çalışır, Turbo modda kulaklık önerilir' gibi gerçek desibel örnekleri koysaydınız beklentimi ona göre ayarlardım.`;
   }
 }

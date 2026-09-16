@@ -5,23 +5,24 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
-  Cpu,
+  ShoppingBag,
   Lightbulb,
   MessageSquareQuote,
   UploadCloud,
   ChevronRight,
-  Flame,
-  Monitor,
-  Headphones
+  Laptop,
+  Shirt,
+  Sparkles,
+  Coffee
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
 const NAV_ITEMS = [
   { label: 'Executive Dashboard', href: '/', icon: LayoutDashboard },
-  { label: 'Hardware & Defects', href: '/products', icon: Cpu },
+  { label: 'Catalog & Chronic Defects', href: '/products', icon: ShoppingBag },
   { label: 'Growth & A/B Lab', href: '/hypotheses', icon: Lightbulb },
-  { label: 'Customer Persona Chat', href: '/persona-chat', icon: MessageSquareQuote },
-  { label: 'Review Ingestion & AI', href: '/import', icon: UploadCloud },
+  { label: 'Multi-Persona Chat', href: '/persona-chat', icon: MessageSquareQuote },
+  { label: 'Review Ingestion & Add Product', href: '/import', icon: UploadCloud },
 ];
 
 export function Sidebar() {
@@ -63,36 +64,36 @@ export function Sidebar() {
 
         <div>
           <span className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
-            Hardware Categories
+            E-Commerce Verticals
           </span>
           <div className="mt-2 space-y-1.5 px-3 text-xs text-slate-400">
             <div className="flex items-center justify-between py-1 border-b border-white/[0.04]">
               <div className="flex items-center gap-2">
-                <Flame className="h-3.5 w-3.5 text-rose-400" />
-                <span>Tulpar Laptop</span>
+                <Laptop className="h-3.5 w-3.5 text-cyan-400" />
+                <span>Consumer Tech</span>
               </div>
-              <span className="font-mono text-[11px] text-rose-400">96°C Hot</span>
+              <span className="font-mono text-[11px] text-cyan-400">$32.4k</span>
             </div>
             <div className="flex items-center justify-between py-1 border-b border-white/[0.04]">
               <div className="flex items-center gap-2">
-                <Monitor className="h-3.5 w-3.5 text-cyan-400" />
-                <span>Aryond Monitör</span>
+                <Shirt className="h-3.5 w-3.5 text-purple-400" />
+                <span>Fashion & Apparel</span>
               </div>
-              <span className="font-mono text-[11px] text-cyan-400">165Hz Glow</span>
+              <span className="font-mono text-[11px] text-purple-400">$26.8k</span>
             </div>
             <div className="flex items-center justify-between py-1 border-b border-white/[0.04]">
               <div className="flex items-center gap-2">
-                <Cpu className="h-3.5 w-3.5 text-purple-400" />
-                <span>Semruk Desktop</span>
+                <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                <span>Beauty & Care</span>
               </div>
-              <span className="font-mono text-[11px] text-purple-400">AIO Şok</span>
+              <span className="font-mono text-[11px] text-emerald-400">$14.2k</span>
             </div>
             <div className="flex items-center justify-between py-1">
               <div className="flex items-center gap-2">
-                <Headphones className="h-3.5 w-3.5 text-amber-400" />
-                <span>Pusat Ekipman</span>
+                <Coffee className="h-3.5 w-3.5 text-amber-400" />
+                <span>Home & Kitchen</span>
               </div>
-              <span className="font-mono text-[11px] text-amber-400">2.4GHz RF</span>
+              <span className="font-mono text-[11px] text-amber-400">$18.6k</span>
             </div>
           </div>
         </div>
@@ -100,14 +101,14 @@ export function Sidebar() {
 
       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-mono uppercase text-slate-400">Aylık İade Maliyeti</span>
-          <span className="h-2 w-2 rounded-full bg-rose-500" />
+          <span className="text-[11px] font-mono uppercase text-slate-400">Toplam Portföy Sızıntısı</span>
+          <span className="h-2 w-2 rounded-full bg-rose-500 animate-pulse" />
         </div>
         <div className="mt-2 text-xl font-bold tracking-tight text-white font-mono">
-          $97,000<span className="text-xs font-normal text-slate-400"> /ay</span>
+          $92,000<span className="text-xs font-normal text-slate-400"> /ay</span>
         </div>
         <p className="mt-1 text-[11px] text-slate-400 leading-tight">
-          Donanım termal, panel ve kargo hasarı kaynaklı toplam marj kaybı
+          Beden uyumsuzluğu, termal şikayetler ve ambalaj hasarı kaynaklı iade maliyeti
         </p>
       </div>
     </aside>

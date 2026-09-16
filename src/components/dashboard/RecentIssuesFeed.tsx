@@ -35,7 +35,7 @@ export function RecentIssuesFeed({ reviews }: RecentIssuesFeedProps) {
         <div>
           <CardTitle>Canlı Müşteri Yorum Akışı & Donanım Teşhisleri</CardTitle>
           <CardDescription>
-            Çoklu kanallardan (Monster Web, Trendyol, Hepsiburada, Amazon TR) anlık çekilen ve AI ile etiketlenen yorumlar
+            Çoklu kanallardan (Shopify, Amazon Global, Trendyol, Hepsiburada) anlık çekilen ve AI ile etiketlenen yorumlar
           </CardDescription>
         </div>
       </CardHeader>
