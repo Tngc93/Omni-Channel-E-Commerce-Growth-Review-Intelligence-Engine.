@@ -11,6 +11,7 @@ import {
   MessageSquareQuote,
   MessageSquareReply,
   UploadCloud,
+  FileText,
   ChevronRight,
   Laptop,
   Shirt,
@@ -27,6 +28,7 @@ const NAV_ITEMS = [
   { label: 'Multi-Persona Chat', href: '/persona-chat', icon: MessageSquareQuote },
   { label: 'AI Return-Save Agent', href: '/recovery', icon: MessageSquareReply },
   { label: 'Review Ingestion & Add Product', href: '/import', icon: UploadCloud },
+  { label: 'Executive & Factory Reports', href: '/reports', icon: FileText },
 ];
 
 export function Sidebar() {
