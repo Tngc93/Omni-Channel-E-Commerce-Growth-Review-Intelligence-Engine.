@@ -50,47 +50,31 @@ Modern e-commerce brands operating across multiple channels (Shopify, Amazon Glo
 
 ## 2. System Architecture & Ingestion Pipeline
 
-ReviewIQ leverages a **hybrid Server-Side Rendering (SSR) pre-hydration architecture** combined with a modular AI classification pipeline:
-
-<div align="center">
-  <img src="docs/architecture.svg" alt="ReviewIQ System Architecture" width="100%" style="border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);" />
-</div>
-
-<details>
-<summary><strong>🔍 Click to expand Technical Architecture Flow (Mermaid Pipeline)</strong></summary>
-
 ```mermaid
-flowchart LR
-    subgraph INGESTION ["1. Omni-Channel Ingestion"]
-        A1["Shopify & Webhooks"]
-        A2["Amazon Global Reviews"]
-        A3["Trendyol & Hepsiburada"]
-        A4["REST Ingest API"]
-    end
-
-    subgraph ENGINE ["2. ReviewIQ AI Diagnostics"]
-        B1["Multi-Provider LLM Router"]
-        B2["11-Aspect ABSA Engine"]
-        B3["Root-Cause Correlator"]
-        B4["Margin Leakage Calculator"]
-    end
-
-    subgraph GROWTH ["3. Growth & QA Lab"]
-        C1["A/B Experiment Generator"]
-        C2["Gherkin Specs (QA)"]
-        C3["Synthetic Persona Chat"]
-    end
-
-    subgraph UI ["4. Apple Presentation"]
-        D1["Segmented Toolbar"]
-        D2["Vulnerability Radar"]
-        D3["Dark & Light Themes"]
-    end
-
-    INGESTION --> ENGINE --> GROWTH --> UI
-    ENGINE --> UI
+flowchart TD
+    A[Next.js 15 App Router Frontend]
+    
+    A --> B[ReviewIQ Unified Ingestion Engine]
+    
+    B --> C[Aspect-Based Sentiment AI Pipeline]
+    
+    C --> D[Chronic Defect & Telemetry Boundary]
+    C --> E[Growth & Experimentation Lab]
+    
+    D -->|Unit Return Economics| F[Margin Loss Estimator]
+    D -->|Persistence & Audit| G[Prisma ORM + SQLite Lake]
+    
+    E -->|Automated User Stories| H[QA Gherkin Specs Compiler]
+    E -->|Customer Tone & Complaints| I[Synthetic Persona Simulator]
+    
+    I --> J[AI Provider Registry]
+    
+    J -->|Production Primary| K[Google Gemini 2.5 Flash]
+    J -->|Commercial Fallback| L[OpenAI GPT-4o]
+    J -->|Offline Testing| M[Local Heuristic Engine]
 ```
-</details>
+
+More detail: [AI Architecture](#4-ai-diagnostics--mathematical-modeling), [Data Model](#7-database-schema--relational-design), and [Design System](#5-apple-grade-human-interface-system).
 
 ---
 
