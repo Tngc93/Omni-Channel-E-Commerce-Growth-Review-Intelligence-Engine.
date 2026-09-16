@@ -90,3 +90,18 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+/* Select & Option Dropdown Universal Contrast Fix */
+select {
+  color-scheme: light;
+}
+.dark select {
+  color-scheme: dark;
+}
+option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+.dark option {
+  background-color: #0c121e !important;
+  color: #f8fafc !important;
+}

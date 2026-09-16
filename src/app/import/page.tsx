@@ -222,11 +222,11 @@ export default function ImportPage() {
                 <select
                   value={scrapeLimit}
                   onChange={(e) => setScrapeLimit(Number(e.target.value))}
-                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full rounded-xl bg-slate-50 dark:bg-[#0c121e] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 font-mono cursor-pointer"
                 >
-                  <option value={5}>5 Yorum (Hızlı Test)</option>
-                  <option value={10}>10 Yorum (Standart Örneklem)</option>
-                  <option value={25}>25 Yorum (Kapsamlı Analiz)</option>
+                  <option value={5} className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">5 Yorum (Hızlı Test)</option>
+                  <option value={10} className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">10 Yorum (Standart Örneklem)</option>
+                  <option value={25} className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">25 Yorum (Kapsamlı Analiz)</option>
                 </select>
               </div>
 
@@ -273,12 +273,12 @@ export default function ImportPage() {
                 <select
                   value={channel}
                   onChange={(e) => setChannel(e.target.value)}
-                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full rounded-xl bg-slate-50 dark:bg-[#0c121e] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 cursor-pointer"
                 >
-                  <option value="Shopify Direct">Shopify Store</option>
-                  <option value="Amazon Global">Amazon Global</option>
-                  <option value="Trendyol">Trendyol</option>
-                  <option value="Hepsiburada">Hepsiburada</option>
+                  <option value="Shopify Direct" className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">Shopify Store</option>
+                  <option value="Amazon Global" className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">Amazon Global</option>
+                  <option value="Trendyol" className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">Trendyol</option>
+                  <option value="Hepsiburada" className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">Hepsiburada</option>
                 </select>
               </div>
             </div>
@@ -350,12 +350,12 @@ export default function ImportPage() {
                 <select
                   value={newProdCategory}
                   onChange={(e) => setNewProdCategory(e.target.value)}
-                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full rounded-xl bg-slate-50 dark:bg-[#0c121e] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 cursor-pointer"
                 >
-                  <option value="Consumer Electronics">Consumer Electronics</option>
-                  <option value="Fashion & Apparel">Fashion & Apparel</option>
-                  <option value="Beauty & Skincare">Beauty & Skincare</option>
-                  <option value="Home & Kitchen">Home & Kitchen</option>
+                  <option value="Consumer Electronics" className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">Consumer Electronics</option>
+                  <option value="Fashion & Apparel" className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">Fashion & Apparel</option>
+                  <option value="Beauty & Skincare" className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">Beauty & Skincare</option>
+                  <option value="Home & Kitchen" className="bg-white dark:bg-[#0c121e] text-slate-900 dark:text-white">Home & Kitchen</option>
                 </select>
               </div>
             </div>
