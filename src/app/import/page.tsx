@@ -4,324 +4,288 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { CheckCircle2, RefreshCw, PlusCircle, MessageSquare, Layers } from 'lucide-react';
+import { UploadCloud, CheckCircle2, Sparkles, PlusCircle, Laptop, Shirt, Coffee } from 'lucide-react';
 
-export default function IngestAndManagePage() {
-  const [activeTab, setActiveTab] = useState<'review' | 'product'>('review');
+export default function ImportPage() {
+  const [activeTab, setActiveTab] = useState<'reviews' | 'product'>('reviews');
+  const [productName, setProductName] = useState('');
+  const [channel, setChannel] = useState('Amazon Global');
+  const [comment, setComment] = useState('');
+  const [rating, setRating] = useState(1);
+  const [status, setStatus] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Review state
-  const [productName, setProductName] = useState('ApexPro 16" Creator & Gaming Laptop');
-  const [channel, setChannel] = useState('Shopify Store');
-  const [rating, setRating] = useState('1');
-  const [comment, setComment] = useState('Omuz dikişleri aşırı dar ve kalıp tamamen yanıltıcı!');
-  const [reviewStatus, setReviewStatus] = useState<string | null>(null);
-  const [reviewLoading, setReviewLoading] = useState(false);
-
-  // Product state
-  const [newProductName, setNewProductName] = useState('');
-  const [newCategory, setNewCategory] = useState('Consumer Electronics');
-  const [newPrice, setNewPrice] = useState('');
-  const [newCost, setNewCost] = useState('');
-  const [newSku, setNewSku] = useState('');
-  const [productStatus, setProductStatus] = useState<string | null>(null);
-  const [productLoading, setProductLoading] = useState(false);
+  // New product fields
+  const [newProdName, setNewProdName] = useState('');
+  const [newProdCategory, setNewProdCategory] = useState('Consumer Electronics');
+  const [newProdSku, setNewProdSku] = useState('');
+  const [newProdPrice, setNewProdPrice] = useState(1200);
+  const [newProdDesc, setNewProdDesc] = useState('');
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setReviewLoading(true);
-    setReviewStatus(null);
+    if (!comment.trim()) return;
+    setLoading(true);
+    setStatus(null);
 
     try {
       const res = await fetch('/api/ingest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          productName,
+          productName: productName || 'ApexPro 16" Creator Laptop',
           channel,
-          rating: Number(rating),
           comment,
+          rating: Number(rating),
         }),
       });
 
       if (res.ok) {
-        setReviewStatus('Yorum başarıyla yerel SQLite veritabanına kaydedildi ve kategoriye duyarlı AI ile etiketlendi!');
+        setStatus('Yorum başarıyla analiz edildi, yapay zeka ile etiketlendi ve veritabanına işlendi!');
         setComment('');
-      } else {
-        setReviewStatus('Kayıt başarısız oldu.');
       }
     } catch (err) {
-      setReviewStatus('Ağ hatası oluştu.');
+      console.error(err);
+      setStatus('Hata oluştu.');
     } finally {
-      setReviewLoading(false);
+      setLoading(false);
     }
   };
 
   const handleProductSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newProductName.trim()) return;
-    setProductLoading(true);
-    setProductStatus(null);
+    if (!newProdName.trim() || !newProdSku.trim()) return;
+    setLoading(true);
+    setStatus(null);
 
     try {
       const res = await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: newProductName,
-          category: newCategory,
-          price: newPrice,
-          cost: newCost,
-          sku: newSku,
+          name: newProdName,
+          category: newProdCategory,
+          sku: newProdSku,
+          price: Number(newProdPrice),
+          description: newProdDesc,
         }),
       });
 
       if (res.ok) {
-        setProductStatus(`"${newProductName}" ürünü başarıyla kataloğa eklendi! Artık bu ürüne yorum bağlayabilirsiniz.`);
-        setNewProductName('');
-        setNewPrice('');
-        setNewCost('');
-        setNewSku('');
-      } else {
-        setProductStatus('Ürün eklenirken hata oluştu.');
+        setStatus(`'${newProdName}' ürünü başarıyla eklendi ve kataloğa aktarıldı!`);
+        setNewProdName('');
+        setNewProdSku('');
+        setNewProdDesc('');
       }
     } catch (err) {
-      setProductStatus('Ağ hatası oluştu.');
+      console.error(err);
+      setStatus('Ürün eklenirken hata oluştu.');
     } finally {
-      setProductLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="space-y-8 apple-bg-glow">
+    <div className="space-y-6 apple-bg-glow">
       <div>
-        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-400">
-          <Layers className="h-3.5 w-3.5" />
-          <span>Omni-Channel Review & Catalog Pipeline</span>
+        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+          <UploadCloud className="h-3.5 w-3.5" />
+          <span>Omni-Channel Review Ingestion & Catalog Management</span>
         </div>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-          Veri Girişi & Özel Ürün Yönetimi
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
+          Çok Kanallı Veri Aktarımı & Ürün Yönetimi
         </h1>
-        <p className="mt-1 text-xs sm:text-sm text-slate-400 max-w-2xl">
-          İster kendi e-ticaret mağazanızdan yeni bir ürün ekleyin, ister Amazon, Trendyol, Hepsiburada veya Shopify'dan canlı yorumları yapıştırarak anlık AI analizi yapın.
+        <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+          Shopify, Trendyol, Hepsiburada ve Amazon'dan gelen müşteri incelemelerini anlık olarak içe aktarın veya platforma yeni bir kategori ve ürün ekleyin.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-white/[0.08] pb-3">
+      <div className="flex gap-2 p-1.5 rounded-2xl bg-white/80 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] w-fit shadow-sm">
         <button
-          onClick={() => setActiveTab('review')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-            activeTab === 'review'
-              ? 'bg-white text-slate-950 shadow-md'
-              : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+          onClick={() => { setActiveTab('reviews'); setStatus(null); }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
+            activeTab === 'reviews'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-semibold shadow-md'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <MessageSquare className="h-4 w-4" /> Canlı Yorum Ekle & Analiz Et
+          <UploadCloud className="h-4 w-4" />
+          <span>Müşteri Yorumu İçe Aktar</span>
         </button>
 
         <button
-          onClick={() => setActiveTab('product')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+          onClick={() => { setActiveTab('product'); setStatus(null); }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
             activeTab === 'product'
-              ? 'bg-white text-slate-950 shadow-md'
-              : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-semibold shadow-md'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <PlusCircle className="h-4 w-4" /> Kataloğa Yeni Ürün Ekle
+          <PlusCircle className="h-4 w-4" />
+          <span>Yeni Ürün / Kategori Ekle</span>
         </button>
       </div>
 
-      {activeTab === 'review' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Canlı Müşteri Yorumu İçe Aktarımı</CardTitle>
-              <CardDescription>Yorum metnini girin; AI otomatik olarak boyutu (Beden, Termal, Ambalaj, Sızdırmazlık) tespit edecektir.</CardDescription>
-            </CardHeader>
+      {status && (
+        <div className="flex items-center gap-2.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-xs font-medium text-emerald-700 dark:text-emerald-300">
+          <CheckCircle2 className="h-4 w-4 text-emerald-500 flex-shrink-0" />
+          <span>{status}</span>
+        </div>
+      )}
 
-            <form onSubmit={handleReviewSubmit} className="space-y-4">
+      {activeTab === 'reviews' ? (
+        <Card className="max-w-2xl space-y-4">
+          <CardHeader>
+            <CardTitle>Tekil / Toplu Yorum Girişi</CardTitle>
+            <CardDescription>
+              İnceleme metnini yapıştırın; yapay zeka sektörüne göre duygu, boyut ve iade riskini otomatik analiz edecektir.
+            </CardDescription>
+          </CardHeader>
+
+          <form onSubmit={handleReviewSubmit} className="space-y-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-300">İlişkili Ürün</label>
-                <select
+                <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Ürün Adı:</label>
+                <input
+                  type="text"
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
-                >
-                  <option>ApexPro 16" Creator & Gaming Laptop</option>
-                  <option>Merino Wool Minimalist Tailored Blazer</option>
-                  <option>Botanical Barrier Repair Peptide Night Serum</option>
-                  <option>BaristaCraft Precision Dual-Boiler Espresso Machine</option>
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-semibold text-slate-300">Satış Kanalı</label>
-                  <select
-                    value={channel}
-                    onChange={(e) => setChannel(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
-                  >
-                    <option>Shopify Store</option>
-                    <option>Amazon Global / TR</option>
-                    <option>Trendyol</option>
-                    <option>Hepsiburada</option>
-                    <option>Özel Web Sitesi</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-slate-300">Puan (Yıldız)</label>
-                  <select
-                    value={rating}
-                    onChange={(e) => setRating(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
-                  >
-                    <option value="1">1 Yıldız (Kritik İade Riski)</option>
-                    <option value="2">2 Yıldız</option>
-                    <option value="3">3 Yıldız</option>
-                    <option value="4">4 Yıldız</option>
-                    <option value="5">5 Yıldız (Yüksek Memnuniyet)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-slate-300">Müşteri Yorumu Metni</label>
-                <textarea
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  rows={3}
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white placeholder-slate-500 focus:border-white/30 focus:outline-none"
-                  placeholder="Yorumu buraya yapıştırın..."
+                  placeholder="ApexPro 16 veya Blazer Ceket..."
+                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
-              <Button type="submit" disabled={reviewLoading} className="w-full">
-                {reviewLoading ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Veritabanına Ekle & AI Boyutunu Çıkar'}
-              </Button>
-
-              {reviewStatus && (
-                <div className="rounded-xl bg-emerald-500/10 p-3 text-xs text-emerald-300 border border-emerald-500/25 flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
-                  <span>{reviewStatus}</span>
-                </div>
-              )}
-            </form>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Kategoriye Duyarlı AI Teşhis Kuralları</CardTitle>
-              <CardDescription>Farklı sektörlerde hangi boyutlar ayrıştırılır?</CardDescription>
-            </CardHeader>
-
-            <div className="space-y-3 text-xs text-slate-300">
-              <div className="rounded-xl bg-white/[0.02] p-3 border border-white/[0.06]">
-                <span className="font-semibold text-cyan-400 font-mono">1. Tüketici Elektroniği:</span>
-                <p className="text-slate-400 mt-1">İşlemci/GPU sıcaklığı, fan akustiği (dB), OLED/IPS ışık sızması, yazılım/BIOS çökmeleri.</p>
-              </div>
-              <div className="rounded-xl bg-white/[0.02] p-3 border border-white/[0.06]">
-                <span className="font-semibold text-purple-400 font-mono">2. Moda & Tekstil:</span>
-                <p className="text-slate-400 mt-1">Omuz ve göğüs darlığı, beden tablosu uyuşmazlığı, kumaş çekmesi, dikiş mukavemeti.</p>
-              </div>
-              <div className="rounded-xl bg-white/[0.02] p-3 border border-white/[0.06]">
-                <span className="font-semibold text-emerald-400 font-mono">3. Kozmetik & Kişisel Bakım:</span>
-                <p className="text-slate-400 mt-1">Cam damlalık kırılması, kargo sızıntısı, formül alerji/tahriş reaksiyonu, oksitlenme.</p>
-              </div>
-              <div className="rounded-xl bg-white/[0.02] p-3 border border-white/[0.06]">
-                <span className="font-semibold text-amber-400 font-mono">4. Ev & Mutfak Aletleri:</span>
-                <p className="text-slate-400 mt-1">Basınç contası sızdırmazlığı, kullanım kılavuzu anlaşılırlığı, motor gürültüsü, dayanıklılık.</p>
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Satış Kanalı:</label>
+                <select
+                  value={channel}
+                  onChange={(e) => setChannel(e.target.value)}
+                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="Shopify Direct">Shopify Store</option>
+                  <option value="Amazon Global">Amazon Global</option>
+                  <option value="Trendyol">Trendyol</option>
+                  <option value="Hepsiburada">Hepsiburada</option>
+                </select>
               </div>
             </div>
-          </Card>
-        </div>
-      ) : (
-        <Card className="max-w-2xl">
-          <CardHeader>
-            <CardTitle>Kataloğa Yeni Özel Ürün Tanımlama</CardTitle>
-            <CardDescription>İncelemek istediğiniz herhangi bir sektöre ait ürünü ekleyin.</CardDescription>
-          </CardHeader>
 
-          <form onSubmit={handleProductSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300">Ürün Adı ve Modeli</label>
-              <input
-                type="text"
-                required
-                value={newProductName}
-                onChange={(e) => setNewProductName(e.target.value)}
-                placeholder="Örn: Ergonomik Titreşimli Ofis Koltuğu"
-                className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
+              <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Verilen Puan (1 - 5 Yıldız):</label>
+              <div className="flex gap-3">
+                {[1, 2, 3, 4, 5].map((val) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => setRating(val)}
+                    className={`h-9 w-9 rounded-xl border font-mono font-bold transition-all ${
+                      rating === val
+                        ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md'
+                        : 'bg-slate-50 dark:bg-white/[0.04] border-slate-300 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100'
+                    }`}
+                  >
+                    {val}★
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Müşteri Yorum Metni:</label>
+              <textarea
+                rows={4}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Örn: Ceketin kalıbı omuzlardan inanılmaz sıktı, kolumu kaldıramadım... VEYA: Cam damlalık kargoda dökülmüş..."
+                className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 leading-relaxed"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-semibold text-slate-300">Sektör / Kategori</label>
-                <select
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
-                >
-                  <option>Consumer Electronics</option>
-                  <option>Fashion & Apparel</option>
-                  <option>Beauty & Skincare</option>
-                  <option>Home & Kitchen</option>
-                  <option>Fitness & Sports</option>
-                  <option>Accessories</option>
-                </select>
-              </div>
+            <Button type="submit" disabled={loading || !comment.trim()}>
+              <Sparkles className="h-4 w-4 mr-1.5" />
+              {loading ? 'Yapay Zeka Analiz Ediyor...' : 'Yorumu Analiz Et & Kaydet'}
+            </Button>
+          </form>
+        </Card>
+      ) : (
+        <Card className="max-w-2xl space-y-4">
+          <CardHeader>
+            <CardTitle>Yeni Ürün / Model Tanımlama</CardTitle>
+            <CardDescription>
+              Portföyünüze istediğiniz sektörden yeni bir ürün ekleyin. Yapay zeka bu ürünün iadelerini ve incelemelerini takip etmeye başlar.
+            </CardDescription>
+          </CardHeader>
 
+          <form onSubmit={handleProductSubmit} className="space-y-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-300">Stok Kodu (SKU)</label>
+                <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Ürün Adı:</label>
                 <input
                   type="text"
-                  value={newSku}
-                  onChange={(e) => setNewSku(e.target.value)}
-                  placeholder="Örn: OFS-CHR-ERG-01"
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-semibold text-slate-300">Perakende Fiyat ($)</label>
-                <input
-                  type="number"
-                  step="0.01"
+                  value={newProdName}
+                  onChange={(e) => setNewProdName(e.target.value)}
+                  placeholder="Örn: Silk Satin Slip Dress veya OLED Monitor..."
+                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
                   required
-                  value={newPrice}
-                  onChange={(e) => setNewPrice(e.target.value)}
-                  placeholder="249.00"
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300">Ürün Maliyeti ($)</label>
+                <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Sektör / Kategori:</label>
+                <select
+                  value={newProdCategory}
+                  onChange={(e) => setNewProdCategory(e.target.value)}
+                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="Consumer Electronics">Consumer Electronics</option>
+                  <option value="Fashion & Apparel">Fashion & Apparel</option>
+                  <option value="Beauty & Skincare">Beauty & Skincare</option>
+                  <option value="Home & Kitchen">Home & Kitchen</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">SKU Kodu:</label>
+                <input
+                  type="text"
+                  value={newProdSku}
+                  onChange={(e) => setNewProdSku(e.target.value)}
+                  placeholder="Örn: SKU-DRS-0912"
+                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Birim Fiyat ($):</label>
                 <input
                   type="number"
-                  step="0.01"
-                  value={newCost}
-                  onChange={(e) => setNewCost(e.target.value)}
-                  placeholder="95.00"
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 p-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
+                  value={newProdPrice}
+                  onChange={(e) => setNewProdPrice(Number(e.target.value))}
+                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  required
                 />
               </div>
             </div>
 
-            <Button type="submit" disabled={productLoading} className="w-full">
-              {productLoading ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Ürünü Kaydet & Kataloğa Ekle'}
-            </Button>
+            <div>
+              <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Ürün Açıklaması & Özellikleri:</label>
+              <textarea
+                rows={3}
+                value={newProdDesc}
+                onChange={(e) => setNewProdDesc(e.target.value)}
+                placeholder="Malzeme, boyutlar veya teknik özellikler..."
+                className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 leading-relaxed"
+              />
+            </div>
 
-            {productStatus && (
-              <div className="rounded-xl bg-emerald-500/10 p-3 text-xs text-emerald-300 border border-emerald-500/25 flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
-                <span>{productStatus}</span>
-              </div>
-            )}
+            <Button type="submit" disabled={loading || !newProdName.trim() || !newProdSku.trim()}>
+              <PlusCircle className="h-4 w-4 mr-1.5" />
+              {loading ? 'Ekleniyor...' : 'Ürünü Kataloğa Ekle'}
+            </Button>
           </form>
         </Card>
       )}

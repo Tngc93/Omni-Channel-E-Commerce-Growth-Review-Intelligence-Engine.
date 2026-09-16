@@ -5,7 +5,8 @@ import { ExecutiveSummary } from '@/components/dashboard/ExecutiveSummary';
 import { DefectRadarChart } from '@/components/dashboard/DefectRadarChart';
 import { RevenueLeakageCard } from '@/components/dashboard/RevenueLeakageCard';
 import { RecentIssuesFeed } from '@/components/dashboard/RecentIssuesFeed';
-import { Layers } from 'lucide-react';
+import { Layers, Laptop, Shirt, Sparkles, Coffee, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 interface ProductData {
   id: string;
@@ -52,23 +53,23 @@ const CATEGORY_RADAR_MAP: Record<string, Array<{ aspect: string; complaintScore:
     { aspect: 'Kumaş Dökümü & Yün', complaintScore: 45, returnImpact: 35 },
     { aspect: 'Yıkama / Çekme', complaintScore: 68, returnImpact: 72 },
     { aspect: 'Dikiş Mukavemeti', complaintScore: 55, returnImpact: 50 },
-    { aspect: 'Renk Tonu Uyuşmazlığı', complaintScore: 40, returnImpact: 30 },
+    { aspect: 'Fermuar Kalitesi', complaintScore: 60, returnImpact: 55 },
   ],
   'Beauty & Skincare': [
-    { aspect: 'Kırık Cam Damlalık', complaintScore: 95, returnImpact: 98 },
-    { aspect: 'Kargo Sıvı Sızıntısı', complaintScore: 90, returnImpact: 94 },
-    { aspect: 'Damlalık Hava Kaçağı', complaintScore: 75, returnImpact: 70 },
-    { aspect: 'Serum Oksitlenmesi', complaintScore: 68, returnImpact: 65 },
-    { aspect: 'Cilt Hassasiyeti', complaintScore: 50, returnImpact: 45 },
-    { aspect: 'Koku & Yapışkanlık', complaintScore: 35, returnImpact: 25 },
+    { aspect: 'Kırık Cam Damlalık (Kargo)', complaintScore: 95, returnImpact: 96 },
+    { aspect: 'Ambalaj Sızdırma / Dökülme', complaintScore: 88, returnImpact: 90 },
+    { aspect: 'Cilt Hassasiyeti / Kızarıklık', complaintScore: 60, returnImpact: 50 },
+    { aspect: 'Peptit Doku / Emilim Hızı', complaintScore: 40, returnImpact: 30 },
+    { aspect: 'Koku / Parfüm Hissi', complaintScore: 45, returnImpact: 35 },
+    { aspect: 'Şişe Doluluk Oranı', complaintScore: 50, returnImpact: 45 },
   ],
   'Home & Kitchen': [
-    { aspect: '15 Bar Portafiltre Sızıntısı', complaintScore: 92, returnImpact: 95 },
-    { aspect: 'Silikon Conta Aşınması', complaintScore: 86, returnImpact: 90 },
-    { aspect: 'Kılavuz & İlk Kurulum', complaintScore: 78, returnImpact: 75 },
-    { aspect: 'Su Pompası Hava Yapması', complaintScore: 70, returnImpact: 65 },
-    { aspect: 'Buhar Çubuğu Gücü', complaintScore: 52, returnImpact: 48 },
-    { aspect: 'Temizlik & Kireç', complaintScore: 42, returnImpact: 35 },
+    { aspect: 'Portafiltre Conta Kaçağı', complaintScore: 92, returnImpact: 95 },
+    { aspect: '15 Bar Basınç Düşüşü', complaintScore: 85, returnImpact: 88 },
+    { aspect: 'Buhar Çubuğu Sıçratması', complaintScore: 70, returnImpact: 65 },
+    { aspect: 'Kireçlenme / Temizlik', complaintScore: 60, returnImpact: 55 },
+    { aspect: 'Su Haznesi Sızdırmazlığı', complaintScore: 65, returnImpact: 60 },
+    { aspect: 'Isınma Süresi', complaintScore: 55, returnImpact: 50 },
   ],
 };
 
@@ -78,38 +79,44 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/products')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.products) setProducts(data.products);
+    async function loadData() {
+      try {
+        const res = await fetch('/api/products');
+        if (res.ok) {
+          const data = await res.json();
+          setProducts(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch products', err);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+      }
+    }
+    loadData();
   }, []);
 
-  const categories = ['ALL', 'Consumer Electronics', 'Fashion & Apparel', 'Beauty & Skincare', 'Home & Kitchen'];
+  const categories = [
+    { id: 'ALL', label: 'Tüm Sektörler', icon: Layers, count: '4 SKU' },
+    { id: 'Consumer Electronics', label: 'Consumer Tech', icon: Laptop, count: 'ApexPro 16"' },
+    { id: 'Fashion & Apparel', label: 'Fashion & Apparel', icon: Shirt, count: 'Tailored Blazer' },
+    { id: 'Beauty & Skincare', label: 'Beauty & Skincare', icon: Sparkles, count: 'Peptide Serum' },
+    { id: 'Home & Kitchen', label: 'Home & Kitchen', icon: Coffee, count: 'BaristaCraft' },
+  ];
 
   const filteredProducts = selectedCategory === 'ALL'
     ? products
-    : products.filter((p) => p.category === selectedCategory);
+    : products.filter((p) => p.category.toLowerCase().includes(selectedCategory.toLowerCase()) || selectedCategory.toLowerCase().includes(p.category.toLowerCase()));
 
-  let totalLoss = 0;
-  let totalReturnRateSum = 0;
-  let criticalDefects = 0;
+  const totalLoss = filteredProducts.reduce((sum, p) => {
+    return sum + p.insights.reduce((acc, i) => acc + i.estimatedMonthlyLoss, 0);
+  }, 0);
 
-  filteredProducts.forEach((p) => {
-    p.insights?.forEach((i) => {
-      totalLoss += i.estimatedMonthlyLoss;
-      if (i.severity === 'CRITICAL' || i.severity === 'HIGH') criticalDefects++;
-    });
-    totalReturnRateSum += p.returnRate;
-  });
+  const avgReturnRate = filteredProducts.length > 0
+    ? filteredProducts.reduce((sum, p) => sum + p.returnRate, 0) / filteredProducts.length
+    : 14.8;
 
-  const avgReturnRate = filteredProducts.length > 0 ? totalReturnRateSum / filteredProducts.length : 0;
-  const totalReviewsCount = filteredProducts.reduce((acc, p) => acc + (p.reviews?.length || 0), 0);
+  const totalReviewsCount = filteredProducts.reduce((sum, p) => sum + p.reviews.length, 0);
+  const criticalDefects = filteredProducts.reduce((sum, p) => sum + p.insights.length, 0);
 
   const radarData = CATEGORY_RADAR_MAP[selectedCategory] || CATEGORY_RADAR_MAP.ALL;
 
@@ -118,12 +125,12 @@ export default function DashboardPage() {
     name: p.name,
     category: p.category,
     returnRate: p.returnRate,
-    monthlyLoss: p.insights?.reduce((acc, i) => acc + i.estimatedMonthlyLoss, 0) || 0,
-    primaryDefect: p.insights?.[0]?.defectType || 'İnceleme altında',
-  }));
+    monthlyLoss: p.insights.reduce((acc, i) => acc + i.estimatedMonthlyLoss, 0),
+    primaryDefect: p.insights[0]?.defectType || 'Genel Kalite & Tolerans',
+  })).sort((a, b) => b.monthlyLoss - a.monthlyLoss);
 
   const allReviewsFeed = filteredProducts.flatMap((p) =>
-    (p.reviews || []).map((r) => ({
+    p.reviews.map((r) => ({
       id: r.id,
       productName: p.name,
       rating: r.rating,
@@ -135,41 +142,74 @@ export default function DashboardPage() {
   ).slice(0, 6);
 
   return (
-    <div className="space-y-8 apple-bg-glow">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-400">
-            <Layers className="h-3.5 w-3.5" />
-            <span>Universal E-Commerce Growth Intelligence</span>
-            <span>•</span>
-            <span className="text-slate-400">Çok Sektörlü Analiz</span>
-          </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-            Yönetici Büyüme & İade Teşhis Paneli
-          </h1>
-          <p className="mt-1 text-xs sm:text-sm text-slate-400 max-w-3xl">
-            Tüketici elektroniği, moda/tekstil, kozmetik ve ev aletlerinde müşteri incelemelerini ve iade nedenlerini kategoriye özel yapay zeka ile ayrıştırın.
-          </p>
+    <div className="space-y-6 apple-bg-glow">
+      {/* 1. Header Area: Clean, Spacious Title */}
+      <div className="space-y-1">
+        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+          <Layers className="h-3.5 w-3.5" />
+          <span>Universal E-Commerce Growth Intelligence</span>
+          <span>•</span>
+          <span className="text-slate-500 dark:text-slate-400">Çok Sektörlü Analiz</span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
+          Yönetici Büyüme & İade Teşhis Paneli
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+          Tüketici elektroniği, moda/tekstil, kozmetik ve ev aletlerinde müşteri incelemelerini ve iade nedenlerini kategoriye özel yapay zeka ile ayrıştırın.
+        </p>
+      </div>
+
+      {/* 2. Dedicated Apple-Grade Segmented Toolbar (Fixes the cramped "basık" layout) */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-2 rounded-2xl bg-white/80 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] backdrop-blur-2xl shadow-sm">
+        {/* Segmented Pills - Scrollable on mobile, spacious on desktop */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 px-1">
+          {categories.map((cat) => {
+            const Icon = cat.icon;
+            const isActive = selectedCategory === cat.id;
+
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                  isActive
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-semibold shadow-md shadow-slate-900/10 dark:shadow-white/10 scale-[1.02]'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-white/[0.05]'
+                }`}
+              >
+                <Icon className={`h-4 w-4 ${isActive ? 'text-emerald-400 dark:text-emerald-600' : 'text-slate-400'}`} />
+                <span>{cat.label}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono ${
+                    isActive
+                      ? 'bg-white/20 dark:bg-slate-900/10 text-white dark:text-slate-900 font-semibold'
+                      : 'bg-slate-200/70 dark:bg-white/[0.06] text-slate-500 dark:text-slate-400'
+                  }`}
+                >
+                  {cat.count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Category Filter Pills */}
-        <div className="flex flex-wrap gap-1.5 p-1 rounded-2xl bg-white/[0.04] border border-white/[0.08] backdrop-blur-xl">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer ${
-                selectedCategory === cat
-                  ? 'bg-white text-slate-950 font-semibold shadow-md'
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
-              }`}
-            >
-              {cat === 'ALL' ? 'Tüm Sektörler' : cat}
-            </button>
-          ))}
+        {/* Live Telemetry Status & Quick Link */}
+        <div className="hidden lg:flex items-center gap-3 pr-2 flex-shrink-0">
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-600 dark:text-slate-400 pl-3 border-l border-slate-200 dark:border-white/[0.08]">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>AI Telemetri Aktif</span>
+          </div>
+          <Link
+            href="/import"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:underline"
+          >
+            <span>+ Ürün Ekle</span>
+            <ArrowRight className="h-3 w-3" />
+          </Link>
         </div>
       </div>
 
+      {/* 3. Executive Metrics */}
       <ExecutiveSummary
         totalEstimatedLoss={totalLoss}
         avgReturnRate={avgReturnRate}
@@ -177,11 +217,13 @@ export default function DashboardPage() {
         criticalDefectsCount={criticalDefects}
       />
 
+      {/* 4. Radar & Leakage Cards */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         <DefectRadarChart data={radarData} />
         <RevenueLeakageCard products={leakingProducts} />
       </div>
 
+      {/* 5. Ingested Feedback Feed */}
       <RecentIssuesFeed reviews={allReviewsFeed} />
     </div>
   );

@@ -15,25 +15,25 @@ export default async function HypothesesPage() {
   return (
     <div className="space-y-8 apple-bg-glow">
       <div>
-        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-400">
+        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
           <Lightbulb className="h-3.5 w-3.5" />
           <span>Product Management & Growth Lab</span>
         </div>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
           E-Ticaret Büyüme & A/B Deney Laboratuvarı
         </h1>
-        <p className="mt-1 text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
+        <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
           Tüketici elektroniği, moda kalıp iadeleri, kozmetik ambalaj sızıntıları ve ev aletlerinde müşteri şikayetlerinden otomatik türetilen A/B test hipotezleri ve Gherkin kabul kriterleri.
         </p>
       </div>
 
       <div className="space-y-5">
         {hypotheses.map((h) => (
-          <Card key={h.id} className="border-l-4 border-l-emerald-500 bg-white/[0.02]">
+          <Card key={h.id} className="border-l-4 border-l-emerald-500 bg-white/70 dark:bg-white/[0.02]">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono">
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-mono">
                     {h.product.name}
                   </span>
                   <Badge variant="cyan">{h.testType}</Badge>
@@ -42,26 +42,26 @@ export default async function HypothesesPage() {
                   </Badge>
                 </div>
 
-                <h3 className="text-base sm:lg font-bold text-white">{h.title}</h3>
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">{h.title}</h3>
 
-                <div className="rounded-xl bg-black/40 p-3.5 text-xs border border-white/[0.08] space-y-2">
+                <div className="rounded-xl bg-slate-100 dark:bg-black/40 p-3.5 text-xs border border-slate-200 dark:border-white/[0.08] space-y-2">
                   <div>
-                    <span className="font-semibold text-rose-400 font-mono">Gözlemlenen Müşteri Problemi: </span>
-                    <span className="text-slate-300 leading-relaxed">{h.problemStatement}</span>
+                    <span className="font-semibold text-rose-600 dark:text-rose-400 font-mono">Gözlemlenen Müşteri Problemi: </span>
+                    <span className="text-slate-700 dark:text-slate-300 leading-relaxed">{h.problemStatement}</span>
                   </div>
                   <div>
-                    <span className="font-semibold text-emerald-400 font-mono">A/B Test Hipotezi: </span>
-                    <span className="text-slate-200 leading-relaxed">{h.hypothesis}</span>
+                    <span className="font-semibold text-emerald-600 dark:text-emerald-400 font-mono">A/B Test Hipotezi: </span>
+                    <span className="text-slate-800 dark:text-slate-200 leading-relaxed">{h.hypothesis}</span>
                   </div>
                 </div>
 
                 {h.gherkinSpec && (
                   <div className="mt-3">
-                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 font-mono mb-1.5">
-                      <Code2 className="h-3.5 w-3.5 text-emerald-400" />
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-600 dark:text-slate-400 font-mono mb-1.5">
+                      <Code2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                       <span>Yazılım & QA Gherkin Spesifikasyonu (Cucumber / Playwright):</span>
                     </div>
-                    <pre className="rounded-xl bg-[#040609] p-3.5 font-mono text-[11px] text-emerald-300 whitespace-pre-wrap border border-emerald-500/20 leading-relaxed">
+                    <pre className="rounded-xl bg-slate-900 dark:bg-[#040609] p-3.5 font-mono text-[11px] text-emerald-400 whitespace-pre-wrap border border-slate-800 dark:border-emerald-500/20 leading-relaxed">
                       {h.gherkinSpec}
                     </pre>
                   </div>
@@ -70,7 +70,7 @@ export default async function HypothesesPage() {
 
               <div className="sm:text-right min-w-[200px] flex-shrink-0">
                 <span className="text-[11px] text-slate-500 font-mono uppercase font-semibold">Hedeflenen Etki</span>
-                <div className="mt-1 flex items-center sm:justify-end gap-1.5 text-sm font-bold text-emerald-400 font-mono">
+                <div className="mt-1 flex items-center sm:justify-end gap-1.5 text-sm font-bold text-emerald-600 dark:text-emerald-400 font-mono">
                   <TrendingUp className="h-4 w-4" />
                   <span>{h.expectedMetricImpact}</span>
                 </div>
