@@ -1,13 +1,72 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { MockAiEngine } from '@/lib/ai/mock-engine';
+import { checkRateLimit } from '@/lib/security/rate-limiter';
+import { z } from 'zod';
+
+const ScrapeRequestSchema = z.object({
+  url: z.string().url('Geçerli bir web adresi giriniz.').max(1000, 'URL çok uzun.'),
+  limit: z.number().int().min(1, 'Limit en az 1 olmalıdır.').max(50, 'Limit en fazla 50 olabilir.').default(10),
+  targetProduct: z.string().max(200).optional(),
+});
+
+function isPrivateOrLoopbackHost(hostname: string): boolean {
+  const lower = hostname.toLowerCase();
+  if (lower === 'localhost' || lower === '127.0.0.1' || lower === '::1') return true;
+  if (lower.startsWith('10.') || lower.startsWith('192.168.') || lower.startsWith('169.254.')) return true;
+  if (/^172\.(1[6-9]|2\d|3[01])\./.test(lower)) return true;
+  return false;
+}
 
 export async function POST(req: Request) {
   try {
-    const { url, limit = 10, targetProduct } = await req.json();
+    // Rate Limiting Protection (20 requests per minute)
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || 'client';
+    const rateCheck = checkRateLimit(`scrape:${ip}`, 20, 60000);
+    if (!rateCheck.success) {
+      return NextResponse.json(
+        { error: 'Çok fazla kazıma isteği gönderildi. Lütfen bir süre sonra tekrar deneyin.' },
+        { status: 429 }
+      );
+    }
 
-    if (!url || typeof url !== 'string') {
-      return NextResponse.json({ error: 'Geçerli bir ürün URL\'si giriniz.' }, { status: 400 });
+    let rawBody;
+    try {
+      rawBody = await req.json();
+    } catch {
+      return NextResponse.json({ error: 'Geçersiz JSON içeriği.' }, { status: 400 });
+    }
+
+    const parseResult = ScrapeRequestSchema.safeParse(rawBody);
+    if (!parseResult.success) {
+      return NextResponse.json(
+        { error: parseResult.error.errors[0]?.message || 'Geçersiz istek parametreleri.' },
+        { status: 400 }
+      );
+    }
+
+    const { url, limit, targetProduct } = parseResult.data;
+
+    // SSRF & Protocol Validation
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url);
+    } catch {
+      return NextResponse.json({ error: 'Geçersiz URL formatı.' }, { status: 400 });
+    }
+
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      return NextResponse.json(
+        { error: 'Yalnızca HTTP ve HTTPS protokolleri desteklenmektedir.' },
+        { status: 400 }
+      );
+    }
+
+    if (isPrivateOrLoopbackHost(parsedUrl.hostname)) {
+      return NextResponse.json(
+        { error: 'İç ağ veya yerel sunucu adreslerine erişim engellendi (SSRF Koruması).' },
+        { status: 403 }
+      );
     }
 
     let channel = 'Web Marketplace';
@@ -63,7 +122,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const reviewsToInsert = scrapedSamples.slice(0, Number(limit) || 10);
+    const reviewsToInsert = scrapedSamples.slice(0, limit);
     const createdReviews = [];
 
     for (const item of reviewsToInsert) {
@@ -92,6 +151,10 @@ export async function POST(req: Request) {
       sampleReview: createdReviews[0]?.comment,
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error('[SCRAPER API ERROR]:', err);
+    return NextResponse.json(
+      { error: 'Kazıma işlemi sırasında bir sunucu hatası meydana geldi.' },
+      { status: 500 }
+    );
   }
 }

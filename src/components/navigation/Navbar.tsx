@@ -43,7 +43,7 @@ export function Navbar() {
         <a
           href="https://github.com/Tngc93/ecommerce-growth-intelligence-engine"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-white/[0.1] bg-slate-100 dark:bg-white/[0.03] px-3.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/[0.08] hover:border-slate-300 dark:hover:border-white/20 transition-all shadow-sm"
         >
           <Github className="h-4 w-4" />
