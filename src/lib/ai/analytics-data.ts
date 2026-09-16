@@ -39,70 +39,70 @@ export const REVISION_COHORTS: RevisionCohort[] = [
   {
     id: 'cohort-tech',
     category: 'Consumer Electronics',
-    productName: 'ApexPro 16" Creator & Gaming Laptop',
-    sku: 'APX-16-OLED-4070',
-    revisionTitle: 'Vapour Chamber Soğutma & Fan Akustiği v2.1',
+    productName: 'Sony WH-1000XM5 Gürültü Engelleyici Kulaklık',
+    sku: 'AMZ-SONY-WH1000XM5',
+    revisionTitle: 'Headphones Connect Sabit ANC Kilitleme & Kafa Bandı Pedi',
     revisionDate: 'Haziran 2026',
-    rootDefectResolved: '94°C aşırı ısınma ve 56 dB fan gürültüsü şikayetleri giderildi.',
-    beforeReturnRate: 24.2,
-    afterReturnRate: 7.1,
-    unitsShippedSince: 450,
-    unitPrice: 1650,
-    unitReturnProcessingCost: 35.0,
-    savedReturnsCount: 77, // Math.round(450 * (0.242 - 0.071))
-    recoveredRevenue: 129745, // 77 * (1650 + 35)
+    rootDefectResolved: 'Auto NC Optimizer seviye dalgalanması ve kafa tepe baskısı şikayetleri giderildi.',
+    beforeReturnRate: 18.2,
+    afterReturnRate: 4.8,
+    unitsShippedSince: 1850,
+    unitPrice: 420,
+    unitReturnProcessingCost: 28.0,
+    savedReturnsCount: 248, // Math.round(1850 * (0.182 - 0.048))
+    recoveredRevenue: 111104, // 248 * (420 + 28)
     csatImprovement: 1.4,
   },
   {
     id: 'cohort-fashion',
     category: 'Fashion & Apparel',
-    productName: 'Merino Wool Minimalist Tailored Blazer',
-    sku: 'MRN-BLZ-SLIM-01',
-    revisionTitle: 'Kalıp Toleransı & 3D Beden Ölçü Tablosu',
+    productName: "Levi's 511 Slim Fit Esnek Denim Jean",
+    sku: 'AMZ-LEVIS-511-SLIM',
+    revisionTitle: 'Menşei Bel Kalıp Kalibrasyonu & Canlı Beden Asistanı',
     revisionDate: 'Temmuz 2026',
-    rootDefectResolved: 'Omuz ve koltuk altı dar kalıp şikayetleri giderildi, 1 beden uyarısı eklendi.',
-    beforeReturnRate: 22.8,
-    afterReturnRate: 5.4,
-    unitsShippedSince: 1200,
-    unitPrice: 185,
-    unitReturnProcessingCost: 12.5,
-    savedReturnsCount: 209, // Math.round(1200 * (0.228 - 0.054))
-    recoveredRevenue: 41277.5, // 209 * (185 + 12.5)
-    csatImprovement: 1.6,
+    rootDefectResolved: 'Mısır ve Pakistan üretimi arasındaki 3cm bel darlığı toleransı standartlaştırıldı.',
+    beforeReturnRate: 21.4,
+    afterReturnRate: 5.6,
+    unitsShippedSince: 3800,
+    unitPrice: 58,
+    unitReturnProcessingCost: 8.0,
+    savedReturnsCount: 600, // Math.round(3800 * (0.214 - 0.056))
+    recoveredRevenue: 39600, // 600 * (58 + 8)
+    csatImprovement: 1.5,
   },
   {
     id: 'cohort-beauty',
     category: 'Beauty & Skincare',
-    productName: 'Botanical Barrier Repair Peptide Night Serum',
-    sku: 'BTR-SERUM-30ML',
-    revisionTitle: 'Darbe Emici Köpük Kutu & Kilitli Damlalık',
+    productName: 'The Ordinary Niacinamide 10% + Zinc 1%',
+    sku: 'HB-ORD-NIACIN-30',
+    revisionTitle: 'Kilitli Damlalık Kapağı & 2 Damla Rutin Kılavuzu',
     revisionDate: 'Ağustos 2026',
-    rootDefectResolved: 'Kargoda cam damlalık çatlama ve sızdırma sorunu %98 oranında kesildi.',
-    beforeReturnRate: 18.5,
-    afterReturnRate: 2.1,
-    unitsShippedSince: 2800,
-    unitPrice: 48,
-    unitReturnProcessingCost: 8.0,
-    savedReturnsCount: 459, // Math.round(2800 * (0.185 - 0.021))
-    recoveredRevenue: 25704, // 459 * (48 + 8)
-    csatImprovement: 1.8,
+    rootDefectResolved: 'Kargoda damlalık diş sıyırması ve fazla sürmekten kaynaklanan pilling (soyulma) çözüldü.',
+    beforeReturnRate: 14.5,
+    afterReturnRate: 2.2,
+    unitsShippedSince: 5200,
+    unitPrice: 16,
+    unitReturnProcessingCost: 5.0,
+    savedReturnsCount: 640, // Math.round(5200 * (0.145 - 0.022))
+    recoveredRevenue: 13440, // 640 * (16 + 5)
+    csatImprovement: 1.7,
   },
   {
     id: 'cohort-home',
     category: 'Home & Kitchen',
-    productName: 'BaristaCraft Precision Dual-Boiler Smart Espresso',
-    sku: 'BC-ESP-15BAR-SS',
-    revisionTitle: 'Gıda Uyumlu 15-Bar Çift Dudaklı Conta',
+    productName: 'Philips HD9880/90 Airfryer Combi XXL',
+    sku: 'HB-PHILIPS-HD9880-XXL',
+    revisionTitle: 'NutriU Wi-Fi 90s Handshake Firmware & Hızlı Kurulum QR Kartı',
     revisionDate: 'Ağustos 2026',
-    rootDefectResolved: '15 bar basınç altında portafiltre kenarından sıcak su sızması engellendi.',
-    beforeReturnRate: 16.0,
-    afterReturnRate: 3.2,
-    unitsShippedSince: 650,
-    unitPrice: 590,
-    unitReturnProcessingCost: 28.0,
-    savedReturnsCount: 83, // Math.round(650 * (0.160 - 0.032))
-    recoveredRevenue: 51294, // 83 * (590 + 28)
-    csatImprovement: 1.5,
+    rootDefectResolved: 'Modern 5GHz modemlerle yaşanan 2.4GHz eşleşme zaman aşımı ve ray sürtünmesi giderildi.',
+    beforeReturnRate: 16.8,
+    afterReturnRate: 3.5,
+    unitsShippedSince: 2200,
+    unitPrice: 340,
+    unitReturnProcessingCost: 32.0,
+    savedReturnsCount: 293, // Math.round(2200 * (0.168 - 0.035))
+    recoveredRevenue: 108996, // 293 * (340 + 32)
+    csatImprovement: 1.6,
   },
 ];
 

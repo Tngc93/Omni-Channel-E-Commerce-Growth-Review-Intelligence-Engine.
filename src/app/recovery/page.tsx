@@ -21,27 +21,27 @@ import {
 
 const SAMPLE_COMPLAINTS = [
   {
-    title: 'Moda / Ceket Kalıp Şikayeti',
-    product: 'Merino Wool Minimalist Tailored Blazer',
-    comment: 'Beden tablosuna bakarak Medium aldım ama omuzlar ve koltuk altı aşırı dar, kollarımı kaldıramadım. İade ediyorum.',
+    title: "Moda / Levi's Bel Kalıp Şikayeti",
+    product: "Levi's 511 Slim Fit Denim Jean",
+    comment: 'Beden tablosuna bakarak 32/32 aldım ama beli aşırı dar, içine girmem imkansız. İade ediyorum.',
     rating: 1,
   },
   {
-    title: 'Kozmetik / Kargo Cam Kırığı',
-    product: 'Botanical Barrier Repair Peptide Serum',
-    comment: 'Kargo geldiğinde kutu ezilmişti, cam damlalık kırılmış ve serum zarfın içine akmıştı. Rezalet.',
+    title: 'Kozmetik / The Ordinary Kargo & Damlalık',
+    product: 'The Ordinary Niacinamide 10% + Zinc 1%',
+    comment: 'Kargo geldiğinde kutu ezilmişti, damlalık kapağı diş sıyırmış ve serum zarfın içine akmıştı. İade ediyorum.',
     rating: 1,
   },
   {
-    title: 'Teknoloji / Laptop Fan Gürültüsü',
-    product: 'ApexPro 16" Creator Laptop',
-    comment: 'Blender\'da 4K render alırken fanlar 56 dB ile yan odadan duyuluyor ve klavye yanıyor, 94 derece. İade edeceğim.',
+    title: 'Teknoloji / Sony XM5 ANC & Kafa Bandı',
+    product: 'Sony WH-1000XM5 Gürültü Engelleyici Kulaklık',
+    comment: 'Auto NC Optimizer sürekli seviyeyi düşürüyor ve dar kafa bandı 2 saat sonra başımda şiddetli ağrı yapıyor. İade edeceğim.',
     rating: 2,
   },
   {
-    title: 'Ev Aleti / Espresso Conta Sızıntısı',
-    product: 'BaristaCraft Precision Dual-Boiler Espresso',
-    comment: 'Portafiltre contası 15 bar basınç altında kenardan sıcak kahve fışkırtıyor. Mutfak battı.',
+    title: 'Ev Aleti / Philips Airfryer Wi-Fi & Ray Sıkışması',
+    product: 'Philips HD9880/90 Airfryer Combi XXL',
+    comment: 'NutriU uygulaması modeme bağlanmıyor ve hazne rayı metal aksama sürtüp zor oturuyor. İade edeceğim.',
     rating: 1,
   },
 ];

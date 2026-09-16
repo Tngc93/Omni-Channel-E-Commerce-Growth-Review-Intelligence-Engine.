@@ -63,7 +63,7 @@ export default function ImportPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          productName: productName || 'ApexPro 16" Creator Laptop',
+          productName: productName || 'Sony WH-1000XM5 Gürültü Engelleyici Kulaklık',
           channel,
           comment,
           rating: Number(rating),
@@ -245,6 +245,44 @@ export default function ImportPage() {
                   required
                 />
               </div>
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                <span className="text-[10px] text-slate-500 font-mono py-1">Hızlı Gerçek URL Örnekleri:</span>
+                <button
+                  type="button"
+                  onClick={() => setScrapeUrl('https://www.amazon.com.tr/dp/B09Y2MYL5C')}
+                  className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-white/[0.05] hover:bg-slate-200 dark:hover:bg-white/10 text-[10px] font-mono text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-white/10"
+                >
+                  🎧 Sony XM5 (Amazon)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScrapeUrl('https://www.hepsiburada.com/philips-hd9880-90-airfryer-combi-7000-serisi-xxl-pm-HBC00004NZ66X')}
+                  className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-white/[0.05] hover:bg-slate-200 dark:hover:bg-white/10 text-[10px] font-mono text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-white/10"
+                >
+                  🍟 Philips XXL (Hepsiburada)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScrapeUrl('https://www.amazon.com.tr/dp/B0CX219XPRO')}
+                  className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-white/[0.05] hover:bg-slate-200 dark:hover:bg-white/10 text-[10px] font-mono text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-white/10"
+                >
+                  🥤 Stanley Quencher (Amazon)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScrapeUrl('https://www.hepsiburada.com/the-ordinary-niacinamide-10-zinc-1-30ml-pm-HB00000N7K15')}
+                  className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-white/[0.05] hover:bg-slate-200 dark:hover:bg-white/10 text-[10px] font-mono text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-white/10"
+                >
+                  ✨ The Ordinary (Hepsiburada)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScrapeUrl('https://allbirds.com/products/mens-wool-runners')}
+                  className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-white/[0.05] hover:bg-slate-200 dark:hover:bg-white/10 text-[10px] font-mono text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-white/10"
+                >
+                  👟 Allbirds (Shopify Direct)
+                </button>
+              </div>
               <span className="text-[11px] text-slate-400 mt-1 block">
                 Desteklenen kanallar: Amazon Global, Trendyol, Hepsiburada, Shopify Storefronts
               </span>
@@ -358,7 +396,7 @@ export default function ImportPage() {
                   type="text"
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
-                  placeholder="ApexPro 16 veya Blazer Ceket..."
+                  placeholder="Sony WH-1000XM5 veya Philips Airfryer..."
                   className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>

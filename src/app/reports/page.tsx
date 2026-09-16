@@ -150,32 +150,39 @@ export default function ReportsPage() {
                   </thead>
                   <tbody className="divide-y divide-slate-200 dark:divide-white/10 font-medium">
                     <tr>
-                      <td className="p-3 font-bold">ApexPro 16" Creator Laptop</td>
+                      <td className="p-3 font-bold">Sony WH-1000XM5 Kulaklık</td>
                       <td className="p-3">Consumer Tech</td>
-                      <td className="p-3 text-rose-500 font-mono">%18.2</td>
+                      <td className="p-3 text-rose-500 font-mono">%14.6</td>
                       <td className="p-3 font-mono font-bold text-rose-500">$38,400</td>
-                      <td className="p-3 text-slate-600 dark:text-slate-300">94°C Throttling & 56dB Fan Akustiği</td>
+                      <td className="p-3 text-slate-600 dark:text-slate-300">Auto NC Seviye Dalgalanması & Kafa Bandı</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-bold">BaristaCraft Dual-Boiler Espresso</td>
+                      <td className="p-3 font-bold">Philips HD9880/90 Airfryer Combi XXL</td>
                       <td className="p-3">Home & Kitchen</td>
-                      <td className="p-3 text-rose-500 font-mono">%16.8</td>
-                      <td className="p-3 font-mono font-bold text-rose-500">$27,300</td>
-                      <td className="p-3 text-slate-600 dark:text-slate-300">15-Bar Basınç Altında Conta Sızıntısı</td>
+                      <td className="p-3 text-rose-500 font-mono">%15.8</td>
+                      <td className="p-3 font-mono font-bold text-rose-500">$42,200</td>
+                      <td className="p-3 text-slate-600 dark:text-slate-300">NutriU Wi-Fi Eşleşme Kopması & Ray Sıkışması</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-bold">Merino Wool Tailored Blazer</td>
-                      <td className="p-3">Fashion & Apparel</td>
+                      <td className="p-3 font-bold">Levi's 511 Slim Fit Denim Jean</td>
+                      <td className="p-3">Fashion & Denim</td>
                       <td className="p-3 text-rose-500 font-mono">%21.4</td>
-                      <td className="p-3 font-mono font-bold text-rose-500">$21,800</td>
-                      <td className="p-3 text-slate-600 dark:text-slate-300">Omuz Darlığı & Yanıltıcı Beden Tablosu</td>
+                      <td className="p-3 font-mono font-bold text-rose-500">$31,200</td>
+                      <td className="p-3 text-slate-600 dark:text-slate-300">Menşei Ülke Kaynaklı Bel Kalıbı Sapması</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-bold">Barrier Repair Peptide Serum</td>
-                      <td className="p-3">Beauty & Skincare</td>
-                      <td className="p-3 text-amber-500 font-mono">%15.6</td>
+                      <td className="p-3 font-bold">Stanley Quencher H2.0 1.18L</td>
+                      <td className="p-3">Home & Kitchen</td>
+                      <td className="p-3 text-rose-500 font-mono">%11.2</td>
+                      <td className="p-3 font-mono font-bold text-rose-500">$28,600</td>
+                      <td className="p-3 text-slate-600 dark:text-slate-300">FlowState Kapak Yan Yatış Sızıntısı</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">The Ordinary Niacinamide 10% + Zinc 1%</td>
+                      <td className="p-3">Beauty & Care</td>
+                      <td className="p-3 text-amber-500 font-mono">%9.8</td>
                       <td className="p-3 font-mono font-bold text-rose-500">$16,500</td>
-                      <td className="p-3 text-slate-600 dark:text-slate-300">Kargoda Cam Damlalık Kırılması & Akıntı</td>
+                      <td className="p-3 text-slate-600 dark:text-slate-300">Kargoda Damlalık Diş Sıyırması & Pilling</td>
                     </tr>
                   </tbody>
                 </table>
@@ -189,9 +196,9 @@ export default function ReportsPage() {
                 <span>Yönetim Kurulu İçin Öncelikli 3 Büyüme Aksiyonu</span>
               </h4>
               <ol className="list-decimal list-inside space-y-2 text-slate-700 dark:text-slate-300 text-xs leading-relaxed">
-                <li><strong>Moda/Tekstil:</strong> 3D Vücut Tipi Ölçüm Widget'ının ürün sayfasına eklenmesiyle ilk 30 günde iadelerin %42 oranında kesilmesi beklenmektedir.</li>
-                <li><strong>Kozmetik:</strong> Kırılgan cam pipet yerine kırılmaz hava temassız pompalı (airless pump) şişeye geçiş kargo fire oranını sıfırlayacaktır.</li>
-                <li><strong>Donanım & Elektronik:</strong> Control Center yazılımında 'Akıllı Dinamik Sessiz Mod' güncellemesiyle fan gürültüsü şikayetleri tek haneye indirilecektir.</li>
+                <li><strong>Moda/Denim:</strong> Levi's PDP sayfasına dinamik bel ölçüm widget'ı eklenmesiyle ilk 30 günde iadelerin %36 oranında kesilmesi beklenmektedir.</li>
+                <li><strong>Mutfak/Ev Aletleri:</strong> Philips Combi kutu kapağına 2.4GHz Wi-Fi eşleşme animasyonu basılması ve Stanley "Dikey Termos" rozeti kargo firelerini sıfırlayacaktır.</li>
+                <li><strong>Donanım & Ses:</strong> Sony Headphones Connect sabit maksimum ANC kilitleme video rehberiyle Auto NC iade oranı tek haneye indirilecektir.</li>
               </ol>
             </div>
           </div>
@@ -201,7 +208,7 @@ export default function ReportsPage() {
             <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.05] p-4 text-xs">
               <span className="font-bold text-amber-800 dark:text-amber-400 font-mono">DİKKAT (ÜRETİM & KALİTE GÜVENCE DEPARTMANINA): </span>
               <p className="text-slate-700 dark:text-slate-300 mt-1 leading-relaxed">
-                Aşağıdaki tolerans revizyonları, son 90 günde teslim edilen partilerdeki müşteri iadeleri ve servis raporlarından türetilmiştir. Sıradaki seri üretim partisinde bu kriterlere uyulması zorunludur.
+                Aşağıdaki tolerans revizyonları, Amazon ve Hepsiburada üzerinde son 90 günde teslim edilen partilerdeki müşteri iadeleri ve servis raporlarından türetilmiştir. Sıradaki seri üretim partisinde bu kriterlere uyulması zorunludur.
               </p>
             </div>
 
@@ -209,45 +216,46 @@ export default function ReportsPage() {
             <div className="space-y-4">
               <div className="rounded-2xl border border-slate-200 dark:border-white/10 p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold">1. Kalıp & Dikim Toleransı (Merino Wool Blazer)</h4>
-                  <Badge variant="purple">Tekstil / Konfeksiyon</Badge>
+                  <h4 className="text-sm font-bold">1. Bel & Paça Kalıp Toleransı (Levi's 511 Slim Fit Jeans)</h4>
+                  <Badge variant="purple">Tekstil / Denim</Badge>
                 </div>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Şikayet: Omuz ve koltuk altı çevresi tolerans dışı dar kesilmektedir (Müşteri şikayet oranı: %96).
+                  Şikayet: Farklı menşei ülkelerinden (Mısır / Pakistan) gelen partilerde 32 bel ölçüsü 3 cm tolerans dışı dar çıkmaktadır (İade oranı: %82).
                 </p>
                 <div className="rounded-xl bg-slate-100 dark:bg-black/40 p-3 font-mono text-xs space-y-1">
-                  <div><strong>Mevcut Kalıp Omuz:</strong> 44.0 cm ± 0.5 cm (İade Sebebi)</div>
-                  <div className="text-emerald-600 dark:text-emerald-400"><strong>Zorunlu Yeni Kalıp:</strong> 46.2 cm ± 0.3 cm (Armhole derinliği +1.8 cm genişletilecek)</div>
+                  <div><strong>Mevcut Bel Varyansı:</strong> 79.5 cm – 84.0 cm (Kabul Edilemez Sapma)</div>
+                  <div className="text-emerald-600 dark:text-emerald-400"><strong>Zorunlu Kalibrasyon:</strong> 82.5 cm ± 0.5 cm (Tüm tedarikçi fabrikalar için tek yıkama şablonu)</div>
                 </div>
               </div>
 
               <div className="rounded-2xl border border-slate-200 dark:border-white/10 p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold">2. Portafiltre Conta Malzeme Spesifikasyonu (Espresso Machine)</h4>
-                  <Badge variant="warning">Mekanik / Kauçuk</Badge>
+                  <h4 className="text-sm font-bold">2. Wi-Fi Çip Zaman Aşımı & Hazne Rayı (Philips Airfryer Combi XXL)</h4>
+                  <Badge variant="warning">Mekanik & Firmware</Badge>
                 </div>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Şikayet: 15 bar basınç testinde fabrika çıkışlı siyah NBR contalar 60 gün içinde sertleşip kenardan su sızdırmaktadır.
+                  Şikayet: 2.4GHz Wi-Fi eşleşme zaman aşımı 30 saniye ile sınırlı olduğundan modem eşleşmesi başarısız olmaktadır.
                 </p>
                 <div className="rounded-xl bg-slate-100 dark:bg-black/40 p-3 font-mono text-xs space-y-1">
-                  <div><strong>Mevcut Malzeme:</strong> Standart NBR Nitril Kauçuk 60 Shore A</div>
-                  <div className="text-emerald-600 dark:text-emerald-400"><strong>Zorunlu Yeni Malzeme:</strong> FDA Onaylı Gıda Uyumlu Sıvı Silikon (LSR) 70 Shore A (200°C Dayanımlı)</div>
+                  <div><strong>Mevcut Firmware Eşleşme Süresi:</strong> 30 Saniye (Zaman Aşımı Hatası)</div>
+                  <div className="text-emerald-600 dark:text-emerald-400"><strong>Zorunlu Yeni Firmware v3.4:</strong> 90 Saniye Handshake Süresi + Kutu İçi Hızlı Kurulum Kılavuzu</div>
                 </div>
               </div>
 
               <div className="rounded-2xl border border-slate-200 dark:border-white/10 p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold">3. Ambalaj Düşme & Şok Testi Standardı (Peptide Serum)</h4>
-                  <Badge variant="cyan">Ambalaj / Lojistik</Badge>
+                  <h4 className="text-sm font-bold">3. Damlalık Vidalama Torku & Ambalaj (The Ordinary Niacinamide)</h4>
+                  <Badge variant="cyan">Ambalaj & Lojistik</Badge>
                 </div>
                 <div className="rounded-xl bg-slate-100 dark:bg-black/40 p-3 font-mono text-xs space-y-1">
                   <div><strong>Test Standardı:</strong> ISTA 1A Kargo Düşme Testi (1.2m serbest düşüş)</div>
-                  <div className="text-emerald-600 dark:text-emerald-400"><strong>Aksiyon:</strong> Cam damlalık boyun kısmına 4mm EPE darbe emici köpük halka zorunludur.</div>
+                  <div className="text-emerald-600 dark:text-emerald-400"><strong>Aksiyon:</strong> Şişe kapağı vidalama torku 1.8 N·m seviyesine çekilecek ve kargo kolisinde sünger halka kullanılacaktır.</div>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        )
+}
 
         {/* Footer */}
         <div className="mt-12 pt-6 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400 font-mono">

@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding Brand-Agnostic, Multi-Category E-Commerce Growth Database...');
+  console.log('Seeding Real-World Amazon & Hepsiburada E-Commerce Catalog...');
 
   await prisma.growthHypothesis.deleteMany();
   await prisma.intelligenceInsight.deleteMany();
@@ -11,50 +11,61 @@ async function main() {
   await prisma.review.deleteMany();
   await prisma.product.deleteMany();
 
-  // 1. Consumer Electronics: ApexPro 16" Studio & Gaming Laptop
-  const laptop = await prisma.product.create({
+  // 1. Amazon Consumer Electronics: Sony WH-1000XM5
+  const sonyHeadphones = await prisma.product.create({
     data: {
-      name: 'ApexPro 16" Creator & Gaming Laptop (Intel i9, RTX 4070, 32GB RAM, 165Hz OLED)',
-      sku: 'TECH-APX-16-4070',
+      name: 'Sony WH-1000XM5 Kablosuz Gürültü Engelleyici Kulaklık (Gümüş / Siyah)',
+      sku: 'AMZ-SONY-WH1000XM5',
       category: 'Consumer Electronics',
-      price: 1650.0,
-      cost: 1100.0,
-      monthlySales: 540,
-      returnRate: 16.4,
-      imageUrl: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&auto=format&fit=crop&q=80',
-      description: 'Ultra-thin magnesium-alloy chassis, 165Hz OLED Studio display, and high-performance dedicated graphics for creators and gamers.',
+      price: 420.0,
+      cost: 260.0,
+      monthlySales: 1850,
+      returnRate: 14.6,
+      imageUrl: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&auto=format&fit=crop&q=80',
+      description: 'Amazon Bestseller. Çift işlemcili Auto NC Optimizer gürültü engelleme, 8 mikrofonlu kristal netliğinde çağrı kalitesi, 30 saat pil ömrü ve LDAC yüksek çözünürlüklü ses.',
       reviews: {
         create: [
           {
             rating: 2,
-            title: '4K video render ve oyunlarda fanlar 56 dB e ulaşıyor, klavye ısınıyor',
-            comment: 'Ekran kalitesi ve OLED renkler büyüleyici ama render alırken fan sesi uçak motoru gibi 56 desibele çıkıyor. Klavyenin sol yüzeyi 94 dereceye kadar ısınıyor, rahatsız olup iade ettim.',
-            channel: 'Shopify Store',
-            aspect: 'thermals',
+            title: 'Auto NC Optimizer gürültü kesme seviyesini kendi kendine değiştiriyor',
+            comment: 'Uçakta ve trende kullanırken başımı hafifçe çevirdiğimde veya gözlük taktığımda Auto NC Optimizer seviyeyi aniden düşürüyor, dış sesler içeri doluyor. Eski XM4 modelindeki sabit maksimum ANC ayarı kalkmış, çok rahatsız edici. İade ediyorum.',
+            channel: 'Amazon Global',
+            aspect: 'software',
             sentiment: 'negative',
-            sentimentScore: -0.88,
+            sentimentScore: -0.86,
             verifiedPurchase: true,
-            customerName: 'Kaan B. (Video Editor)',
+            customerName: 'Kerem Y. (Sık Uçan Yolcu)',
+          },
+          {
+            rating: 2,
+            title: 'Kafa bandı tepe noktası 2 saat sonra acı veriyor',
+            comment: 'Ses kalitesi ve mikrofon performansı sınıfının lideri fakat kafa bandı çok dar ve ince yapılmış. 2 saatlik toplantıdan sonra başımın tepesinde baskı ve sızı yapıyor. XM4 kesinlikle daha rahattı.',
+            channel: 'Amazon TR',
+            aspect: 'ergonomics',
+            sentiment: 'negative',
+            sentimentScore: -0.78,
+            verifiedPurchase: true,
+            customerName: 'Canan O.',
           },
           {
             rating: 5,
-            title: 'OLED ekran renk doğruluğu ve hafif tasarım muazzam',
-            comment: 'DCI-P3 %100 renk gamı fotoğraf işleme için piyasadaki en iyi panel. Ofis modunda tamamen sessiz çalışıyor.',
+            title: 'Mikrofon kalitesi ve ses sahnesi olağanüstü',
+            comment: 'Açık ofis ortamında rüzgar ve arka plan seslerini tamamen yok ediyor. Zoom toplantılarında karşı taraf stüdyo mikrofonuyla konuştuğumu zannediyor.',
             channel: 'Amazon Global',
-            aspect: 'display',
+            aspect: 'quality',
             sentiment: 'positive',
             sentimentScore: 0.96,
             verifiedPurchase: true,
-            customerName: 'Marcus T.',
+            customerName: 'Marcus T. (Audio Engineer)',
           },
           {
-            rating: 1,
-            title: 'Control Center yazılımı çöküyor ve pil şarjda değilken 1 saatte bitiyor',
-            comment: 'Yazılım optimizasyonu zayıf. Pil ömrü yüksek performans modunda 55 dakikada tükendi. Taşınabilir kullanım için elverişli değil.',
-            channel: 'Trendyol',
-            aspect: 'software',
-            sentiment: 'negative',
-            sentimentScore: -0.9,
+            rating: 4,
+            title: 'Ses şahane ama menteşeler XM4 gibi içe doğru katlanmıyor',
+            comment: 'Kulaklık sadece düz yatabiliyor, eski modeller gibi avuç içine sığacak şekilde katlanmadığı için taşıma çantası sırt çantasında çok fazla yer kaplıyor.',
+            channel: 'Amazon TR',
+            aspect: 'durability',
+            sentiment: 'neutral',
+            sentimentScore: 0.25,
             verifiedPurchase: true,
             customerName: 'Deniz S.',
           },
@@ -62,20 +73,20 @@ async function main() {
       },
       returns: {
         create: [
-          { reason: 'Aşırı fan gürültüsü ve render sırasında klavye ısınması', orderValue: 1650.0, returnCost: 45.0, customerNote: 'Ofis ortamında fan sesi çok yüksek.' },
-          { reason: 'Beklenenden kısa batarya süresi', orderValue: 1650.0, returnCost: 45.0, customerNote: 'Dışarıda çalışırken şarjı hemen bitiyor.' },
+          { reason: 'Auto NC Optimizer kontrolsüz ANC seviye değişimi', orderValue: 420.0, returnCost: 28.0, customerNote: 'Gürültü engelleme kendi kendine azalıp çoğalıyor.' },
+          { reason: 'İnce kafa bandının baş tepesine baskı yapması', orderValue: 420.0, returnCost: 28.0, customerNote: 'Uzun süreli kullanımda baş ağrısı yaptı.' },
         ],
       },
       insights: {
         create: [
           {
-            defectType: 'Render Yükü Altında Agresif Fan Akustiği (56dB) ve Yüzey Isınması',
-            severity: 'CRITICAL',
-            affectedAspect: 'thermals',
-            summary: 'İadelerin %64ü ağır iş yüklerinde fan gürültüsünün 55dB üzerine çıkmasından kaynaklanıyor.',
-            rootCause: 'Kompakt magnezyum kasada buhar odası soğutucusunun fabrika fan eğrisinin aşırı agresif kalibre edilmesi.',
-            estimatedMonthlyLoss: 32400.0,
-            evidenceQuote: 'Render alırken fan sesi 56 desibele çıkıyor, klavye ısınıyor. İade etmek zorunda kaldım.',
+            defectType: 'Auto NC Optimizer Adaptasyon Kararsızlığı & Dar Kafa Bandı Baskısı',
+            severity: 'HIGH',
+            affectedAspect: 'software',
+            summary: 'Amazon iadelerinin %62si ortam basıncı ve baş hareketlerinde Auto NC Optimizer algoritmasının ANC seviyesini aniden düşürmesinden ve ince kafa bandı baskısından kaynaklanıyor.',
+            rootCause: 'Sony V1 işlemcisindeki otomatik optimizasyon eşik değerinin aşırı hassas ayarlanması ve PDP sayfasında sabit ANC moduna nasıl geçileceğinin anlatılmaması.',
+            estimatedMonthlyLoss: 38400.0,
+            evidenceQuote: 'Başımı hafifçe çevirdiğimde Auto NC seviyeyi aniden düşürüyor, dış sesler içeri doluyor.',
             status: 'OPEN',
           },
         ],
@@ -83,84 +94,95 @@ async function main() {
       hypotheses: {
         create: [
           {
-            title: 'PDP İnteraktif Fan Desibel Simülatörü & "Creator Sessiz Mod" Rehberi',
-            problemStatement: 'Müşteriler cihazın ağır moddaki fan sesini bilmeden alıp iade sürecine giriyor (%16.4 iade oranı, $32.4k aylık maliyet).',
-            hypothesis: 'Ürün sayfasına interaktif "Sessiz Mod (24dB) vs Performans Modu (56dB)" desibel karşılaştırıcısı eklenmesi iadeleri %30 azaltacaktır.',
-            expectedMetricImpact: '-%4.9 İade Oranı, +$21,000/Ay Korunan Ciro',
+            title: 'PDP İnteraktif "Sabit Maksimum ANC Kılavuzu" & Kafa Ergonomi Tablosu',
+            problemStatement: 'Müşteriler Headphones Connect uygulamasındaki optimizasyon kapatma ayarını bulamayıp kulaklığı arızalı sanarak iade ediyor (%14.6 iade, $38.4k aylık kayıp).',
+            hypothesis: 'Amazon PDP sayfasına 10 saniyelik "Sony Headphones Connect: Sabit Maksimum ANC Nasıl Kilitlenir?" videosu ve kafa bandı pedi aksesuar önerisi eklenmesi iadeleri %32 azaltacaktır.',
+            expectedMetricImpact: '-%4.7 İade Oranı, +$24,500/Ay Kurtarılan Ciro',
             status: 'TESTING',
-            testType: 'PDP UX / Akustik Simülatörü',
-            gherkinSpec: 'Feature: Laptop Fan Akustik Simülasyonu\n  Scenario: Kullanıcı ürün sayfasında fan sesini dinler\n    Given Kullanıcı ApexPro 16 ürün detay sayfasındadır\n    When "Ofis Sessiz Modu (24dB)" seçildiğinde\n    Then Gerçek desibel ses kaydı dinletilir\n    And "Performans modunda kulaklık kullanımı önerilir" uyarısı gösterilir.',
+            testType: 'PDP Onboarding & Video Rehberi',
+            gherkinSpec: 'Feature: Sony Sabit ANC Kilitleme Rehberi\n  Scenario: Kullanıcı ürün sayfasında ANC ayarlarını inceler\n    Given Kullanıcı Sony WH-1000XM5 detay sayfasındadır\n    When "Gürültü Engelleme Nasıl Çalışır?" sekmesine tıkladığında\n    Then Auto NC sabitleme rehberi gösterilir\n    And İade riski minimize edilir.',
           },
         ],
       },
     },
   });
 
-  // 2. Fashion & Apparel: Merino Wool Tailored Blazer
-  const blazer = await prisma.product.create({
+  // 2. Hepsiburada Home & Kitchen: Philips HD9880/90 Airfryer Combi XXL
+  const philipsAirfryer = await prisma.product.create({
     data: {
-      name: 'Merino Wool Minimalist Tailored Blazer (Slim Fit, Charcoal Grey)',
-      sku: 'FASH-BLZ-MRN-01',
-      category: 'Fashion & Apparel',
-      price: 185.0,
-      cost: 55.0,
-      monthlySales: 1420,
-      returnRate: 22.8,
-      imageUrl: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80',
-      description: '100% Australian Merino wool single-breasted blazer with Italian structured shoulders and unlined breathable back.',
+      name: 'Philips HD9880/90 Airfryer Combi 7000 Serisi XXL Akıllı Sıcak Hava Fritözü',
+      sku: 'HB-PHILIPS-HD9880-XXL',
+      category: 'Home & Kitchen',
+      price: 340.0,
+      cost: 190.0,
+      monthlySales: 2200,
+      returnRate: 15.8,
+      imageUrl: 'https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=600&auto=format&fit=crop&q=80',
+      description: 'Hepsiburada Çok Satan. 8.3L dev hazne, entegre gıda pişirme termometresi (prob), NutriU Wi-Fi bağlantılı akıllı tarif entegrasyonu ve Rapid CombiAir sıcak hava akış teknolojisi.',
       reviews: {
         create: [
           {
             rating: 1,
-            title: 'Omuzlar aşırı dar ve kalıp tamamen yanıltıcı',
-            comment: 'Kumaş kalitesi muazzam ancak kalıp kesinlikle standart Medium değil! Omuz dikişleri kollarıma yapıştı, kollarımı kaldıramadım. Beden tablosu en az 1 beden dar gösteriyor.',
-            channel: 'Shopify Store',
-            aspect: 'fit',
+            title: 'NutriU uygulaması 2.4 GHz Wi-Fi eşleşmesinde sürekli çöküyor ve kopuyor',
+            comment: 'Hepsiburada üzerinden akıllı tarif özelliği için özellikle Combi 7000 modelini tercih ettim. Ancak evdeki modeme bir türlü bağlanmıyor. Uygulama sürekli "Cihaz Çevrimdışı" hatası veriyor, Wi-Fi eşleşmesi 10 kez denemede de koptu. Akılsız model alsam daha iyiydi, iade ettim.',
+            channel: 'Hepsiburada',
+            aspect: 'software',
             sentiment: 'negative',
             sentimentScore: -0.92,
             verifiedPurchase: true,
-            customerName: 'Elena R. (Moda Alıcısı)',
+            customerName: 'Burak D. (Yazılımcı)',
+          },
+          {
+            rating: 2,
+            title: 'Sepet ray mekanizması yerine zor oturuyor ve sürtme yapıyor',
+            comment: 'Hazne çok geniş fakat teleskopik ray mekanizması metal aksamda takılma yapıyor. Sıcak hazneyi tek elle geri itmek neredeyse imkansız, tezgaha sürtüyor.',
+            channel: 'Hepsiburada',
+            aspect: 'durability',
+            sentiment: 'negative',
+            sentimentScore: -0.81,
+            verifiedPurchase: true,
+            customerName: 'Ayşe K.',
           },
           {
             rating: 5,
-            title: '1 beden büyük alınca üzerime dikilmiş gibi oturdu',
-            comment: 'Yorumları okuyup normal bedenimden bir beden büyük (L) sipariş verdim. Kumaş dökümü ve dikişleri lüks markalar ayarında.',
+            title: 'Et pişirme probu tam bir şef gibi çalışıyor',
+            comment: 'Biftek ve bütün tavuk pişirirken probu takıyorsunuz, iç sıcaklık 68 dereceye geldiğinde kendisi duruyor. Asla kurutmadı, sulu ve tam kıvamında oldu.',
             channel: 'Hepsiburada',
             aspect: 'quality',
             sentiment: 'positive',
             sentimentScore: 0.95,
             verifiedPurchase: true,
-            customerName: 'Barış C.',
+            customerName: 'Mert S.',
           },
           {
-            rating: 2,
-            title: 'Kuru temizleme sonrası astar büzüştü',
-            comment: 'Kumaş yün olduğu için talimata uygun temizlettim fakat kol astarı büzüldü ve kol kısmı kastı.',
+            rating: 4,
+            title: 'Boyutu devasa ama temizliği kolay',
+            comment: 'Tezgahta biraz yer kaplıyor ancak parçaları bulaşık makinesinde kolayca yıkanabiliyor. Koku filtresi gerçekten işe yarıyor.',
             channel: 'Trendyol',
-            aspect: 'quality',
-            sentiment: 'negative',
-            sentimentScore: -0.7,
+            aspect: 'usability',
+            sentiment: 'positive',
+            sentimentScore: 0.72,
             verifiedPurchase: true,
-            customerName: 'Selin G.',
+            customerName: 'Selin B.',
           },
         ],
       },
       returns: {
         create: [
-          { reason: 'Omuz ve koltuk altı aşırı dar / kalıp hatası', orderValue: 185.0, returnCost: 18.0, customerNote: 'Normalde M giyiyorum, içine giremedim.' },
-          { reason: 'Beden tablosu ile ürün ölçüsü uyumsuz', orderValue: 185.0, returnCost: 18.0, customerNote: 'Göğüs ölçüsü tabloda yazandan 4 cm dar.' },
+          { reason: 'NutriU Wi-Fi kurulum ve bağlantı kopması arızası', orderValue: 340.0, returnCost: 32.0, customerNote: 'Uygulamaya bağlanamıyor, akıllı özellikleri çalışmıyor.' },
+          { reason: 'Sepet teleskopik ray sıkışması ve sürtünme', orderValue: 340.0, returnCost: 32.0, customerNote: 'Hazne tek elle yerine oturmuyor.' },
         ],
       },
       insights: {
         create: [
           {
-            defectType: 'İtalyan Slim-Cut Omuz Genişliği Mis-Kalibrasyonu & Beden Rehberi Hatası',
+            defectType: 'NutriU Wi-Fi 2.4GHz Eşleşme Zaman Aşımı & Hazne Rayı Tolerans Sertliği',
             severity: 'CRITICAL',
-            affectedAspect: 'fit',
-            summary: 'Giyim iadelerinin %78i omuz genişliğinin standart e-ticaret ölçülerinden dar olmasından ileri geliyor.',
-            rootCause: 'Tasarım kalıbının İtalyan dar kesim olmasına karşın PDP beden tablosunda standart global ölçülerin yayınlanması.',
-            estimatedMonthlyLoss: 26800.0,
-            evidenceQuote: 'Omuzlar aşırı dar ve kalıp tamamen yanıltıcı. Kollarımı kaldıramadım.',
+            affectedAspect: 'software',
+            summary: 'Hepsiburada iadelerinin %68i modern 5GHz mesh modemlerle NutriU uygulamasının 2.4GHz bandında eşleşememesi ve ray mandalı sürtünmesinden kaynaklanıyor.',
+            rootCause: 'Cihaz Wi-Fi çipinin 5GHz ağları desteklememesi ve kutu açılışında Wi-Fi bant ayrımı talimatının bulunmaması.',
+            estimatedMonthlyLoss: 42200.0,
+            evidenceQuote: 'Evdeki modeme bir türlü bağlanmıyor, uygulama sürekli Cihaz Çevrimdışı hatası veriyor.',
             status: 'OPEN',
           },
         ],
@@ -168,169 +190,169 @@ async function main() {
       hypotheses: {
         create: [
           {
-            title: 'Dinamik Beden Asistanı & "Kalıp 1 Beden Dardır" Akıllı Rozeti',
-            problemStatement: 'Müşteriler standart bedenlerini seçip %22.8 iade oranı ve aylık $26.8k marj sızıntısı oluşturuyor.',
-            hypothesis: 'Beden seçici üzerinde belirgin "Kalıbımız Dar Kesimdir - Müşterilerin %84ü 1 Beden Büyük Öneriyor" uyarısı eklenmesi iadeleri %38 azaltacaktır.',
-            expectedMetricImpact: '-%8.6 İade Oranı, +$19,400/Ay Kurtarılan Marj',
-            status: 'VALIDATED',
-            testType: 'PDP Beden Asistanı & Uyarı Rozeti',
-            gherkinSpec: 'Feature: Akıllı Beden Kılavuzu\n  Scenario: Kullanıcı standart bedenini seçtiğinde\n    Given Kullanıcı Blazer ürün detay sayfasındadır\n    When Beden seçiciden "M" seçtiğinde\n    Then "İtalyan dar kalıp: Rahat kullanım için L beden önerilir" uyarısı açılır\n    And Tek tıkla doğru beden sepete eklenir.',
+            title: 'Kutu Kapağı 1 Dakikalık "Wi-Fi & Modem Kurulum QR Kılavuzu" & Ray Yağlama Rehberi',
+            problemStatement: 'Kullanıcılar modem frekans ayrımını yapamadığı için 12.000 TLlik cihazı bağlantı bozuk zannedip iade ediyor ($42.2k aylık zarar).',
+            hypothesis: 'Kutu kapağının içine parlak "Modeminiz 5GHz mi? 1 Dakikada 2.4GHz Eşleme Rehberi" QR kodu ve animasyonlu kurulum kartı eklenmesi iadeleri %35 azaltacaktır.',
+            expectedMetricImpact: '-%5.5 İade Oranı, +$28,800/Ay Kurtarılan Ciro',
+            status: 'TESTING',
+            testType: 'Kutu İçi Onboarding & QR Setup',
+            gherkinSpec: 'Feature: Airfryer Wi-Fi Kolay Kurulum\n  Scenario: Kullanıcı kutuyu açar\n    Given Kullanıcı Philips Airfryer kutusunu açtığında\n    When Kapaktaki 2.4GHz Wi-Fi QR kodunu tarattığında\n    Then Adım adım modem eşleme asistanı açılır ve bağlantı 60 saniyede tamamlanır.',
           },
         ],
       },
     },
   });
 
-  // 3. Beauty & Skincare: Botanical Barrier Repair Peptide Night Serum
-  const serum = await prisma.product.create({
+  // 3. Amazon Home & Lifestyle: Stanley Quencher H2.0 1.18L
+  const stanleyTumbler = await prisma.product.create({
     data: {
-      name: 'Botanical Barrier Repair Peptide Night Serum (30ml, Air-Free Pipette)',
-      sku: 'BEAU-SRM-BTR-30',
-      category: 'Beauty & Skincare',
-      price: 48.0,
-      cost: 12.0,
-      monthlySales: 3100,
-      returnRate: 8.5,
-      imageUrl: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80',
-      description: 'Triple-ceramide and copper-peptide restorative night serum designed for sensitive, compromised skin barriers.',
+      name: 'Stanley The Quencher H2.0 FlowState Paslanmaz Çelik Vakumlu Termos 1.18L',
+      sku: 'AMZ-STANLEY-Q118-FLW',
+      category: 'Home & Kitchen',
+      price: 65.0,
+      cost: 22.0,
+      monthlySales: 4500,
+      returnRate: 11.2,
+      imageUrl: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&auto=format&fit=crop&q=80',
+      description: 'Amazon Bestseller. Çift duvarlı vakum yalıtımı, FlowState 3 pozisyonlu döner kapak, pipet ağzı, araç bardaklıklarına uyumlu ergonomik alt tasarım ve geri dönüştürülmüş paslanmaz çelik gövde.',
       reviews: {
         create: [
           {
             rating: 1,
-            title: 'Cam damlalık kargoda çatlamış ve serum zarfa akmıştı',
-            comment: 'Paketi açtığımda cam damlalığın boynu kırılmıştı ve serumun yarısı baloncuklu zarfın içine sızmıştı. Tehlikeli ambalajlama, cam kırıklarıyla dolu geldi.',
-            channel: 'Amazon TR',
-            aspect: 'shipping',
+            title: 'Çantada yan yatınca pipet kapağından arabanın koltuğuna ve çantama aktı',
+            comment: 'Amazon yorumlarına bakarak aldım. Ancak bu termos kesinlikle sızdırmaz değil! Arabada çantamın içine koydum, virajda devrildiğinde FlowState kapağın pipet aralığından tüm su çantama boşaldı. Spor çantası veya sırt çantası için uygun değil, iade ediyorum.',
+            channel: 'Amazon Global',
+            aspect: 'durability',
             sentiment: 'negative',
-            sentimentScore: -0.95,
+            sentimentScore: -0.91,
             verifiedPurchase: true,
-            customerName: 'Sophie L. (Cilt Bakım Sever)',
+            customerName: 'Seda M.',
+          },
+          {
+            rating: 2,
+            title: 'Kulp vidaları 2 hafta sonra gevşedi ve oynuyor',
+            comment: '1.18L doluyken termos ağırlaşıyor. 2 haftalık kullanımda kulpun üst bağlantı vidası gevşedi, kulp sallanıyor. Vidalamak için özel yıldız tornavida gerekiyor.',
+            channel: 'Amazon TR',
+            aspect: 'quality',
+            sentiment: 'negative',
+            sentimentScore: -0.74,
+            verifiedPurchase: true,
+            customerName: 'Emre C.',
           },
           {
             rating: 5,
-            title: 'Hassas cildimi 1 haftada toparladı, koku ve yapısı mükemmel',
-            comment: 'Kızarıklıklarımı tamamen yatıştırdı. Asla yapışkanlık hissi bırakmıyor. Düzenli sipariş vereceğim.',
-            channel: 'Shopify Store',
+            title: 'Buzlar 2 gün sonra bile erimemiş duruyor, araç bardaklığına tam oturuyor',
+            comment: 'Yaz sıcağında arabada bıraktım, akşam bindiğimde içindeki buzlar hala duruyordu. 1.2 litrelik devasa hacmine rağmen araba bardaklığına oturması mühendislik harikası.',
+            channel: 'Amazon TR',
             aspect: 'formula',
             sentiment: 'positive',
             sentimentScore: 0.98,
+            verifiedPurchase: true,
+            customerName: 'Hakan V.',
+          },
+        ],
+      },
+      returns: {
+        create: [
+          { reason: 'FlowState kapak yan yatışta su sızdırması', orderValue: 65.0, returnCost: 12.0, customerNote: 'Sırt çantamda yan yatınca su akıttı.' },
+          { reason: 'Ergonomik kulp vidalarının sallanması', orderValue: 65.0, returnCost: 12.0, customerNote: 'Kulp gevşedi, taşırken güven vermiyor.' },
+        ],
+      },
+      insights: {
+        create: [
+          {
+            defectType: 'FlowState 3 Kademeli Kapak Yan Yatışta Sızdırma & Kulp Vida Gevşemesi',
+            severity: 'HIGH',
+            affectedAspect: 'durability',
+            summary: 'Stanley iadelerinin %76sı müşterilerin ürünü sızdırmaz seyahat termosu zannederek sırt çantasına yatay koymasından ve pipet deliğinden dökülmesinden kaynaklanıyor.',
+            rootCause: 'FlowState kapağın masa başı ve araç içi tasarlanmış olması ancak PDP sayfasında "Dikey Taşıma Termosudur - Çanta İçi Sızdırabilir" uyarısının bulunmaması.',
+            estimatedMonthlyLoss: 28600.0,
+            evidenceQuote: 'Arabada çantamın içine koydum, virajda devrildiğinde pipet aralığından tüm su çantama boşaldı.',
+            status: 'OPEN',
+          },
+        ],
+      },
+      hypotheses: {
+        create: [
+          {
+            title: 'PDP "Dikey Araç & Masaüstü Termosu" Rozeti & Kutu İçi Silikon Sızdırmazlık Tıpası',
+            problemStatement: 'Müşteriler çantaya atıp akıtınca ürünü kusurlu sanarak iade ediyor (%11.2 iade oranı, $28.6k aylık maliyet).',
+            hypothesis: 'Ürün başlığına ve görsel galerisine "Masaüstü & Araç Kullanımı İçindir - Çanta İçi Yatay Kullanmayınız" rozeti eklenmesi ve kutuya sızdırmaz silikon tıpa aksesuarı konulması iadeleri %42 düşürecektir.',
+            expectedMetricImpact: '-%4.7 İade Oranı, +$22,100/Ay Kurtarılan Ciro',
+            status: 'VALIDATED',
+            testType: 'PDP İletişimi & Aksesuar Bundle',
+            gherkinSpec: 'Feature: Stanley Kullanım Amacı Bilgilendirmesi\n  Scenario: Müşteri satın alma aşamasındadır\n    Given Müşteri Stanley Quencher ürün sayfasındadır\n    When "Kullanım Rehberi" sekmesini incelediğinde\n    Then Dikey araç bardaklığı tasarımı ve silikon sızdırmazlık tıpası bilgisi gösterilir.',
+          },
+        ],
+      },
+    },
+  });
+
+  // 4. Hepsiburada Beauty & Skincare: The Ordinary Niacinamide 10% + Zinc 1%
+  const theOrdinarySerum = await prisma.product.create({
+    data: {
+      name: 'The Ordinary Niacinamide 10% + Zinc 1% Leke ve Gözenek Karşıtı Serum 30ml',
+      sku: 'HB-ORD-NIACIN-30',
+      category: 'Beauty & Skincare',
+      price: 16.0,
+      cost: 4.5,
+      monthlySales: 5200,
+      returnRate: 9.8,
+      imageUrl: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80',
+      description: 'Hepsiburada Çok Satan. Cilt tonu düzensizliklerini ve genişlemiş gözenek görünümünü hedefleyen yüksek konsantrasyonlu vitamin ve mineral leke formülü.',
+      reviews: {
+        create: [
+          {
+            rating: 1,
+            title: 'Cam damlalık kapağı diş sıyırmış ve kargo poşetine sızmıştı',
+            comment: 'Hepsiburada satıcısından sipariş verdim. Baloncuklu zarfın içine serumun üçte biri dökülmüştü. Damlalığın plastik vidalama kapağı diş sıyırmış, yerine oturmuyor ve tam sıkılmıyor. Paketleme çok özensiz.',
+            channel: 'Hepsiburada',
+            aspect: 'shipping',
+            sentiment: 'negative',
+            sentimentScore: -0.94,
             verifiedPurchase: true,
             customerName: 'Zeynep A.',
           },
           {
             rating: 2,
-            title: 'Damlalık kapağı hava sızdırıyor, ürün çabuk oksitlendi',
-            comment: 'Şişe kapağı tam sıkılmıyor, yan yatınca sızdırıyor. 2 haftada serumun rengi sarardı.',
-            channel: 'Trendyol',
-            aspect: 'durability',
+            title: 'Makyaj veya nemlendirici altına sürünce soyulup köpürüyor (pilling)',
+            comment: 'Serumu sürdükten sonra üzerine güneş kremi sürdüğümde yüzümde silgi tozu gibi topaklanma ve beyaz kalıntılar bıraktı. Formülü ciltle bütünleşmiyor.',
+            channel: 'Hepsiburada',
+            aspect: 'formula',
             sentiment: 'negative',
-            sentimentScore: -0.68,
+            sentimentScore: -0.73,
             verifiedPurchase: true,
-            customerName: 'Melis T.',
-          },
-        ],
-      },
-      returns: {
-        create: [
-          { reason: 'Kargoda kırık cam damlalık ve sıvı sızıntısı', orderValue: 48.0, returnCost: 11.0, customerNote: 'Zarfın içine dökülmüş halde geldi.' },
-          { reason: 'Kapak sızdırmazlık arızası', orderValue: 48.0, returnCost: 11.0, customerNote: 'Damlalık vidalama kısmından kaçırıyor.' },
-        ],
-      },
-      insights: {
-        create: [
-          {
-            defectType: 'Kırılgan Cam Damlalık Boyun Mukavemeti & Kargo Titreşim Sızıntısı',
-            severity: 'MEDIUM',
-            affectedAspect: 'shipping',
-            summary: 'Kozmetik iadelerinin %71i formülden değil, kargo taşımacılığındaki cam damlalık kırılmasından kaynaklanıyor.',
-            rootCause: 'Şişe kargo kutusunda iç koruyucu sünger yuva olmaması ve damlalık kauçuk başlığının sarsıntıda gevşemesi.',
-            estimatedMonthlyLoss: 14200.0,
-            evidenceQuote: 'Paketi açtığımda damlalık kırılmıştı, serum zarfa akmıştı.',
-            status: 'OPEN',
-          },
-        ],
-      },
-      hypotheses: {
-        create: [
-          {
-            title: 'Havasız Pompalı (Airless Pump) Şişeye Geçiş ve Darbe Korumalı Kutu',
-            problemStatement: 'Damlalık kırılması ve sızıntı sebebiyle aylık 260+ adet ürün iade/çöp oluyor ($14.2k aylık zarar).',
-            hypothesis: 'Geleneksel cam damlalık yerine hava geçirmez basmalı pompa (Airless Pump) ambalajına geçmek kargo hasarlarını %92 oranında ortadan kaldıracaktır.',
-            expectedMetricImpact: '-%6.1 İade Oranı, +$12,800/Ay Kurtarılan Sermaye',
-            status: 'VALIDATED',
-            testType: 'Ambalaj Revizyonu / Airless Pump',
-            gherkinSpec: 'Feature: Ambalaj Sızdırmazlık & Darbe Dayanıklılığı\n  Scenario: 1.5 metre kargo düşme simülasyonu\n    Given Ürün Airless Pump şişesinde paketlendiğinde\n    When 1.5 metreden serbest düşme testine tabi tutulduğunda\n    Then Sıfır çatlak ve sıfır sıvı sızıntısı elde edilir.',
-          },
-        ],
-      },
-    },
-  });
-
-  // 4. Home & Kitchen: BaristaCraft Precision Dual-Boiler Espresso Machine
-  const espresso = await prisma.product.create({
-    data: {
-      name: 'BaristaCraft Precision Dual-Boiler Smart Espresso Machine (15 Bar, PID Temp)',
-      sku: 'HOME-ESP-BC-900',
-      category: 'Home & Kitchen',
-      price: 590.0,
-      cost: 280.0,
-      monthlySales: 390,
-      returnRate: 12.1,
-      imageUrl: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=600&auto=format&fit=crop&q=80',
-      description: 'Italian commercial-grade rotary pump, independent dual boilers for simultaneous brewing and steaming, with precision digital PID temperature control.',
-      reviews: {
-        create: [
-          {
-            rating: 2,
-            title: '15 bar basınçta portafiltre kenarından sıcak kahve damlatıyor',
-            comment: 'Makinenin ısıtma hızı harika ama portafiltreyi ne kadar sıksam da basınç yükselince kenardan kahve sızıyor. Silikon conta tam oturmuyor gibi. İade ettim.',
-            channel: 'Amazon Global',
-            aspect: 'durability',
-            sentiment: 'negative',
-            sentimentScore: -0.84,
-            verifiedPurchase: true,
-            customerName: 'Marco V. (Kahve Tutkunu)',
+            customerName: 'Melis K.',
           },
           {
             rating: 5,
-            title: 'Kafe kalitesinde espresso ve kusursuz süt kreması',
-            comment: 'Dual boiler sayesinde espresso akarken aynı anda süt köpürtebiliyorum. Basınç göstergesi çok hassas ve tutarlı.',
-            channel: 'Shopify Store',
+            title: 'Gözenekleri ve T bölgesindeki parlamayı 1 haftada sıfırladı',
+            comment: 'Fiyat/performans olarak piyasadaki en iyi leke ve sebum serumu. Nemli cilde 2 damla uygulayıp kurumasını bekleyince harika sonuç veriyor.',
+            channel: 'Trendyol',
             aspect: 'quality',
             sentiment: 'positive',
-            sentimentScore: 0.94,
+            sentimentScore: 0.97,
             verifiedPurchase: true,
-            customerName: 'David K.',
-          },
-          {
-            rating: 2,
-            title: 'Kullanım kılavuzu çok karmaşık, ilk kurulumda su pompası hava yaptı',
-            comment: 'Kutudan çıkan kılavuzda kazan ilk dolum talimatı net yazılmamış. Pompa ses yaptı ama su çekmedi. Müşteri hizmetlerini aramak zorunda kaldım.',
-            channel: 'Trendyol',
-            aspect: 'usability',
-            sentiment: 'negative',
-            sentimentScore: -0.65,
-            verifiedPurchase: true,
-            customerName: 'Ahmet T.',
+            customerName: 'Duygu R.',
           },
         ],
       },
       returns: {
         create: [
-          { reason: 'Portafiltre conta sızıntısı ve basınç kaybı', orderValue: 590.0, returnCost: 35.0, customerNote: 'Kahve yaparken kenarlardan sıcak su fışkırıyor.' },
-          { reason: 'İlk kurulum karmaşası / su pompalamama', orderValue: 590.0, returnCost: 35.0, customerNote: 'Kullanımı çok karmaşık geldi.' },
+          { reason: 'Kargoda damlalık gevşemesi ve kutuya sıvı akması', orderValue: 16.0, returnCost: 5.0, customerNote: 'Paket ıslak ve damlalık kapağı bozuk geldi.' },
+          { reason: 'Ciltte topaklanma ve pilling şikayeti', orderValue: 16.0, returnCost: 5.0, customerNote: 'Üzerine krem sürülmüyor.' },
         ],
       },
       insights: {
         create: [
           {
-            defectType: 'Grup Başlığı Silikon Conta Toleransı & Yüksek Basınç Sızıntısı',
-            severity: 'HIGH',
-            affectedAspect: 'durability',
-            summary: 'İadelerin %58i portafiltre sıkma açısının kullanıcılar tarafından tam kavranamaması ve contanın basınç kaçırmasından kaynaklanıyor.',
-            rootCause: 'Fabrika montajında 58mm grup başlığı contasının sert kauçuktan yapılması ve kilitlenme açısının sert olması.',
-            estimatedMonthlyLoss: 18600.0,
-            evidenceQuote: 'Portafiltreyi ne kadar sıksam da kenardan sıcak su sızıyor.',
+            defectType: 'Damlalık Diş Sıyırma Problemi & Makyaj Altında Pilling (Köpürme/Soyulma)',
+            severity: 'MEDIUM',
+            affectedAspect: 'shipping',
+            summary: 'Kozmetik iadelerinin %65i kargo taşımacılığında damlalık vidalama torkunun gevşemesinden ve kullanıcıların nemlendiriciyi çok erken sürüp ürünü topaklandırmasından ileri geliyor.',
+            rootCause: 'Kargo kolisinde şişe sabitleyici sünger yuva olmaması ve ürün etiketinde 2 damla kullanım ve kuruma süresinin belirtilmemesi.',
+            estimatedMonthlyLoss: 16500.0,
+            evidenceQuote: 'Damlalığın vidalama kapağı diş sıyırmış, yerine oturmuyor ve paket ıslak geldi.',
             status: 'OPEN',
           },
         ],
@@ -338,20 +360,110 @@ async function main() {
       hypotheses: {
         create: [
           {
-            title: 'Gıda Uyumlu Yumuşak Silikon Conta Değişimi & Kutu Kapağında 1 Dakikalık Kurulum Kılavuzu',
-            problemStatement: 'Kullanıcılar conta sızıntısını cihaz arızası zannedip $590lık ürünü iade ediyor (%12.1 iade oranı).',
-            hypothesis: 'Kutu içerisine yüksek esneklikte yedek silikon conta eklemek ve kutu kapağına "Portafiltre Kilit Açısı Kılavuzu" basmak iadeleri %35 azaltacaktır.',
-            expectedMetricImpact: '-%4.2 İade Oranı, +$13,500/Ay Kurtarılan Kâr',
-            status: 'TESTING',
-            testType: 'Kutu İçi Onboarding & Conta İyileştirmesi',
-            gherkinSpec: 'Feature: Espresso Makinesi İlk Kurulum Rehberi\n  Scenario: Kullanıcı kutuyu açar\n    Given Makine kutusundan çıkarıldığında\n    When Kutu kapağındaki "1 Dakikalık Hızlı Kurulum & Conta Oturtma" şeması incelendiğinde\n    Then Kullanıcı grup başlığını doğru açıyla kilitler ve sıfır sızıntı ile kahve demler.',
+            title: 'Kutu Kapağı "3 Adımda Doğru Rutin & Sıfır Pilling" Şeması & Kilitli Damlalık',
+            problemStatement: 'Kullanıcılar fazla miktarda sürüp topaklanma yaşayınca ürünü sahte sanarak iade ediyor ($16.5k aylık iade ve kargo zararı).',
+            hypothesis: 'Şişe üzerine "Sadece 2 damla uygulayın ve 90 saniye kurumasını bekleyin" ikonografisi eklenmesi ve kilitli conta ambalajı iadeleri %45 düşürecektir.',
+            expectedMetricImpact: '-%4.4 İade Oranı, +$13,200/Ay Kurtarılan Sermaye',
+            status: 'VALIDATED',
+            testType: 'Ambalaj Revizyonu & Rutin Kılavuzu',
+            gherkinSpec: 'Feature: Cilt Bakım Rutini Bilgilendirmesi\n  Scenario: Kullanıcı şişe etiketini inceler\n    Given Kullanıcı The Ordinary şişesini eline aldığında\n    When "2 Damla & 90sn Kuruma" ikonunu gördüğünde\n    Then Fazla ürün sürmez, topaklanma yaşamaz ve iade etmez.',
           },
         ],
       },
     },
   });
 
-  console.log('Successfully seeded multi-category (Consumer Electronics, Fashion, Beauty, Home) database!');
+  // 5. Amazon & Hepsiburada Fashion: Levi's 511 Slim Fit Jeans
+  const levisJeans = await prisma.product.create({
+    data: {
+      name: "Levi's 511 Slim Fit Esnek Denim Erkek Jean Pantolon (Koyu Mavi)",
+      sku: 'AMZ-LEVIS-511-SLIM',
+      category: 'Fashion & Apparel',
+      price: 58.0,
+      cost: 20.0,
+      monthlySales: 3800,
+      returnRate: 21.4,
+      imageUrl: 'https://images.unsplash.com/photo-1542272604-780c96856592?w=600&auto=format&fit=crop&q=80',
+      description: 'Amazon & Hepsiburada Bestseller. %99 pamuk %1 elastan esnek denim kumaş, bacakları sarmayan modern slim fit kesim, fermuarlı pat ve ikonik arka cep kavisli dikişi.',
+      reviews: {
+        create: [
+          {
+            rating: 1,
+            title: 'Üretim menşeine göre kalıp tamamen farklı, bel ölçüsü 3 cm dar geldi',
+            comment: "Yıllardır Levi's 511 32/32 giyerim. Ancak bu sefer gelen ürünün beli en az 1 beden dar, içine girmem imkansız. Etikete baktım Mısır üretimi yazıyor, eski aldığım Pakistan üretimiydi. Aynı modelin fabrikalar arası bu kadar ölçü farkı olması kabul edilemez. İade ediyorum.",
+            channel: 'Amazon Global',
+            aspect: 'fit',
+            sentiment: 'negative',
+            sentimentScore: -0.93,
+            verifiedPurchase: true,
+            customerName: 'Tolga B.',
+          },
+          {
+            rating: 2,
+            title: 'Paça boyu tabloda yazandan 4 cm daha uzun',
+            comment: '30 boy sipariş verdim ama paçaları katlamadan giyilemeyecek kadar uzun geldi. Terzide kestirmek zorunda kalacaktım, uğraşmayıp iade ettim.',
+            channel: 'Hepsiburada',
+            aspect: 'fit',
+            sentiment: 'negative',
+            sentimentScore: -0.79,
+            verifiedPurchase: true,
+            customerName: 'Serhat K.',
+          },
+          {
+            rating: 5,
+            title: 'Kumaş esnekliği ve kalitesi tam bir klasik',
+            comment: 'Rengi fotoğraftaki gibi çok asil duruyor. %1 elastan payı sayesinde gün boyu otururken hiç rahatsız etmiyor.',
+            channel: 'Amazon TR',
+            aspect: 'quality',
+            sentiment: 'positive',
+            sentimentScore: 0.95,
+            verifiedPurchase: true,
+            customerName: 'Onur A.',
+          },
+        ],
+      },
+      returns: {
+        create: [
+          { reason: 'Menşei ülke kaynaklı bel ölçüsü dar kalıp hatası', orderValue: 58.0, returnCost: 8.0, customerNote: 'Normalde 32 giyiyorum, beli kapanmadı.' },
+          { reason: 'Paça boyunun standart dışı uzun gelmesi', orderValue: 58.0, returnCost: 8.0, customerNote: 'Paça ölçüsü tabloda yazılandan uzun.' },
+        ],
+      },
+      insights: {
+        create: [
+          {
+            defectType: 'Menşei Ülke Kaynaklı Bel ve Paça Ölçü Tolerans Farklılığı (+/- 2.5cm)',
+            severity: 'CRITICAL',
+            affectedAspect: 'fit',
+            summary: 'Giyim iadelerinin %82si farklı tedarikçi fabrikalardan (Mısır / Pakistan / Türkiye) gelen partilerde bel kalıbının 2-3 cm sapmasından kaynaklanıyor.',
+            rootCause: 'Üretim tesisleri arası yıkama/çekme toleranslarının kalibre edilmemesi ve PDP sayfasında "Kumaş yıkamasına göre yarım beden dar gelebilir" uyarısının olmaması.',
+            estimatedMonthlyLoss: 31200.0,
+            evidenceQuote: 'Etikete baktım Mısır üretimi yazıyor, bel ölçüsü en az 1 beden dar.',
+            status: 'OPEN',
+          },
+        ],
+      },
+      hypotheses: {
+        create: [
+          {
+            title: 'Dinamik Beden Asistanı: "Bel Ölçüm Simülatörü & Menşei Tolerans Rehberi"',
+            problemStatement: 'Müşteriler standart bedenlerini seçip bel dar gelince %21.4 iade oranı oluşturuyor ($31.2k aylık marj kaybı).',
+            hypothesis: 'Beden seçici alanına "Belinizi mezura ile ölçün: Bu koyu yıkama modelimizde 1 beden büyük tercih eden müşterilerin iade oranı %70 daha düşüktür" uyarısı eklenmesi iadeleri %36 azaltacaktır.',
+            expectedMetricImpact: '-%7.7 İade Oranı, +$22,400/Ay Kurtarılan Marj',
+            status: 'VALIDATED',
+            testType: 'PDP Beden Asistanı & Beden Uyarı Rozeti',
+            gherkinSpec: "Feature: Beden Asistanı & Kalıp Önerisi\n  Scenario: Müşteri beden seçimi yapar\n    Given Müşteri Levi's 511 ürün sayfasındadır\n    When \"32 Bel\" seçtiğinde\n    Then \"Koyu yıkama kumaş esnemesi: Rahat kullanım için 33 önerilir\" uyarısı çıkar\n    And Doğru beden sepete eklenir.",
+          },
+        ],
+      },
+    },
+  });
+
+  console.log('Successfully seeded real-world Amazon & Hepsiburada database:');
+  console.log(`1. ${sonyHeadphones.name} (${sonyHeadphones.sku})`);
+  console.log(`2. ${philipsAirfryer.name} (${philipsAirfryer.sku})`);
+  console.log(`3. ${stanleyTumbler.name} (${stanleyTumbler.sku})`);
+  console.log(`4. ${theOrdinarySerum.name} (${theOrdinarySerum.sku})`);
+  console.log(`5. ${levisJeans.name} (${levisJeans.sku})`);
 }
 
 main()

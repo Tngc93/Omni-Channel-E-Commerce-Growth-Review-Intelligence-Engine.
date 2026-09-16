@@ -6,8 +6,8 @@ describe('Competitor Benchmark & Gap Analysis Engine', () => {
   it('should retrieve accurate benchmark data for tech sector', () => {
     const data = CompetitorEngine.getBenchmark('tech');
     expect(data.sectorName).toBe('Consumer Electronics');
-    expect(data.ourProduct.name).toContain('ApexPro');
-    expect(data.competitorProduct.name).toContain('MacBook');
+    expect(data.ourProduct.name).toContain('Sony');
+    expect(data.competitorProduct.name).toContain('AirPods');
     expect(data.moats.length).toBeGreaterThan(0);
     expect(data.blindspots.length).toBeGreaterThan(0);
   });
