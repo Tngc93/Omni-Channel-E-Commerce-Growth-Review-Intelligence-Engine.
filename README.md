@@ -52,43 +52,45 @@ Modern e-commerce brands operating across multiple channels (Shopify, Amazon Glo
 
 ReviewIQ leverages a **hybrid Server-Side Rendering (SSR) pre-hydration architecture** combined with a modular AI classification pipeline:
 
+<div align="center">
+  <img src="docs/architecture.svg" alt="ReviewIQ System Architecture" width="100%" style="border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);" />
+</div>
+
+<details>
+<summary><strong>🔍 Click to expand Technical Architecture Flow (Mermaid Pipeline)</strong></summary>
+
 ```mermaid
-flowchart TD
-    subgraph INGESTION ["1. Omni-Channel Data Ingestion"]
-        A1["Shopify Storefront Webhooks"]
-        A2["Amazon Global Verified Customer Feeds"]
-        A3["Trendyol & Hepsiburada Reviews"]
-        A4["Manual / REST API Batch Importer (/api/ingest)"]
+flowchart LR
+    subgraph INGESTION ["1. Omni-Channel Ingestion"]
+        A1["Shopify & Webhooks"]
+        A2["Amazon Global Reviews"]
+        A3["Trendyol & Hepsiburada"]
+        A4["REST Ingest API"]
     end
 
-    subgraph ENGINE ["2. ReviewIQ AI Intelligence Pipeline"]
-        B1["Multi-Provider AI Dispatcher (Gemini 2.5 Flash / OpenAI / Heuristic)"]
-        B2["Aspect-Based Sentiment Extraction (Fit, Thermals, Formula, Gasket, Shipping)"]
-        B3["Root-Cause Correlator & Vulnerability Severity Classifier"]
-        B4["Margin Loss Estimator (Monthly Sales × Return Rate × True Cost)"]
+    subgraph ENGINE ["2. ReviewIQ AI Diagnostics"]
+        B1["Multi-Provider LLM Router"]
+        B2["11-Aspect ABSA Engine"]
+        B3["Root-Cause Correlator"]
+        B4["Margin Leakage Calculator"]
     end
 
-    subgraph ACTION ["3. Actionable Growth & Product Management Lab"]
-        C1["Automated A/B Test Hypotheses Generator"]
-        C2["QA Gherkin Acceptance Specifications (Cucumber / Playwright)"]
-        C3["Synthetic Persona Customer Simulator (/persona-chat)"]
+    subgraph GROWTH ["3. Growth & QA Lab"]
+        C1["A/B Experiment Generator"]
+        C2["Gherkin Specs (QA)"]
+        C3["Synthetic Persona Chat"]
     end
 
-    subgraph PRESENTATION ["4. Apple-Grade Executive Presentation Layer"]
-        D1["Obsidian & Cupertino Dual Theme System (Dark / Light)"]
-        D2["Apple Segmented Control Toolbar (Zero-Wrap Category Filters)"]
-        D3["Multi-Dimensional Radar Chart (Complaint Volume vs Margin Impact)"]
-        D4["Revenue Leakage Ranking & Verified Review Stream"]
+    subgraph UI ["4. Apple Presentation"]
+        D1["Segmented Toolbar"]
+        D2["Vulnerability Radar"]
+        D3["Dark & Light Themes"]
     end
 
-    INGESTION --> B1
-    B1 --> B2 --> B3 --> B4
-    B3 --> C1 --> C2
-    B3 --> C3
-    B4 --> PRESENTATION
-    C1 --> PRESENTATION
-    C3 --> PRESENTATION
+    INGESTION --> ENGINE --> GROWTH --> UI
+    ENGINE --> UI
 ```
+</details>
 
 ---
 
@@ -126,7 +128,8 @@ ReviewIQ is completely **brand-agnostic**. The platform is verified out-of-the-b
 
 ReviewIQ computes the financial damage of chronic product defects using true return cost economics:
 
-$$	ext{Monthly Revenue Leakage} = (	ext{Monthly Sales} 	imes 	ext{Return Rate}) 	imes \left( C_{	ext{forward}} + C_{	ext{reverse}} + C_{	ext{triage}} + (P 	imes M) ight)$$
+$$	ext{Monthly Revenue Leakage} = (	ext{Monthly Sales} 	imes 	ext{Return Rate}) 	imes \left( C_{	ext{forward}} + C_{	ext{reverse}} + C_{	ext{triage}} + (P 	imes M) 
+ight)$$
 
 *Where:*
 - $C_{	ext{forward}}$: Outbound shipping & packaging costs.
