@@ -9,6 +9,7 @@ import {
   Swords,
   Lightbulb,
   MessageSquareQuote,
+  MessageSquareReply,
   UploadCloud,
   ChevronRight,
   Laptop,
@@ -24,6 +25,7 @@ const NAV_ITEMS = [
   { label: 'Competitor Benchmark', href: '/competitors', icon: Swords },
   { label: 'Growth & A/B Lab', href: '/hypotheses', icon: Lightbulb },
   { label: 'Multi-Persona Chat', href: '/persona-chat', icon: MessageSquareQuote },
+  { label: 'AI Return-Save Agent', href: '/recovery', icon: MessageSquareReply },
   { label: 'Review Ingestion & Add Product', href: '/import', icon: UploadCloud },
 ];
 
