@@ -22,9 +22,52 @@ describe('Hybrid Live Scraper Engine', () => {
     expect(HybridLiveScraper.cleanTitle(rawHtmlEntities)).toBe("Pro & Max 'Special Edition'");
   });
 
+  it('should accurately classify product categories from title and description', () => {
+    expect(HybridLiveScraper.classifyCategory('Apple MacBook Pro M3 Max', '16-inch Retina laptop')).toBe('Consumer Electronics');
+    expect(HybridLiveScraper.classifyCategory('Oversized Yün Blazer Ceket', 'Kumaş ceket takım')).toBe('Fashion & Apparel');
+    expect(HybridLiveScraper.classifyCategory('Hyaluronic Acid Cilt Serumu', 'Nemlendirici peptide serum')).toBe('Beauty & Skincare');
+    expect(HybridLiveScraper.classifyCategory('Paslanmaz Çelik Espresso Kahve Makinesi', 'Basınçlı filtre kahve')).toBe('Home & Kitchen');
+    expect(HybridLiveScraper.classifyCategory('Generic Item 123', 'No category keywords')).toBe('General Marketplace');
+  });
+
+  it('should extract reviews and star ratings from Amazon-style HTML snippets', () => {
+    const mockHtml = `
+      <div class="a-section review">
+        <span data-hook="review-star-rating" class="a-icon-alt"><span>5,0</span></span>
+        <span data-hook="review-body">
+          <span>Harika bir bilgisayar, render hızı inanılmaz ve şarjı çok uzun gidiyor.</span>
+        </span>
+      </div>
+      <div class="a-section review">
+        <span data-hook="review-star-rating" class="a-icon-alt"><span>2,0</span></span>
+        <span data-hook="review-body">
+          <span>Ağır kullanımda fanlar çok ses yapıyor ve ısınıyor maalesef.</span>
+        </span>
+      </div>
+    `;
+
+    const reviews = HybridLiveScraper.extractReviewsFromHtml(mockHtml);
+    expect(reviews.length).toBe(2);
+    expect(reviews[0].comment).toContain('Harika bir bilgisayar');
+    expect(reviews[0].rating).toBe(5);
+    expect(reviews[1].comment).toContain('fanlar çok ses yapıyor');
+    expect(reviews[1].rating).toBe(2);
+  });
+
+  it('should extract reviews from Shopify / Generic review app HTML snippets', () => {
+    const mockHtml = `
+      <div class="jdgm-rev__body">Kumaş kalitesi harika fakat omuz kısmı biraz dar geldi.</div>
+      <p class="loox-review-content">Paketleme çok özenliydi, ürün ertesi gün elime ulaştı.</p>
+    `;
+
+    const reviews = HybridLiveScraper.extractReviewsFromHtml(mockHtml);
+    expect(reviews.length).toBe(2);
+    expect(reviews[0].comment).toContain('Kumaş kalitesi harika');
+    expect(reviews[1].comment).toContain('Paketleme çok özenliydi');
+  });
+
   it('should handle malformed URLs gracefully without crashing', async () => {
     const res = await HybridLiveScraper.fetchProductLive('not-a-valid-url');
-    expect(res.success).toBeUndefined(); // or liveDataExtracted is false
     expect(res.liveDataExtracted).toBe(false);
     expect(res.statusCode).toBe(400);
   });

@@ -14,6 +14,8 @@ import {
   ExternalLink
 } from 'lucide-react';
 
+import Link from 'next/link';
+
 export default function ImportPage() {
   const [activeTab, setActiveTab] = useState<'reviews' | 'product' | 'scraper'>('scraper');
   const [productName, setProductName] = useState('');
@@ -35,6 +37,12 @@ export default function ImportPage() {
   const [scrapeLimit, setScrapeLimit] = useState(5);
   const [scrapeResult, setScrapeResult] = useState<{
     channel: string;
+    productId?: string;
+    productName?: string;
+    productCategory?: string;
+    productPrice?: number;
+    productImage?: string;
+    isNewProductCreated?: boolean;
     scrapedCount: number;
     associatedProduct: string;
     liveTitle?: string;
@@ -125,11 +133,17 @@ export default function ImportPage() {
 
       const data = await res.json();
       if (res.ok) {
-        setStatus(`✓ ${data.channel} üzerinden ${data.scrapedCount} adet müşteri yorumu başarıyla çekildi ve '${data.associatedProduct}' ürününe bağlandı!`);
+        setStatus(`✓ ${data.channel} üzerinden ${data.scrapedCount} adet müşteri yorumu başarıyla işlendi ve '${data.productName || data.associatedProduct}' ürününe bağlandı!`);
         setScrapeResult({
           channel: data.channel,
+          productId: data.productId,
+          productName: data.productName,
+          productCategory: data.productCategory,
+          productPrice: data.productPrice,
+          productImage: data.productImage,
+          isNewProductCreated: data.isNewProductCreated,
           scrapedCount: data.scrapedCount,
-          associatedProduct: data.associatedProduct,
+          associatedProduct: data.productName || data.associatedProduct,
           liveTitle: data.liveTitle,
           liveDataExtracted: data.liveDataExtracted,
           botProtectionDetected: data.botProtectionDetected,
@@ -287,10 +301,13 @@ export default function ImportPage() {
                 </div>
               )}
 
-              <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200 dark:border-white/[0.06]">
+              <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200 dark:border-white/[0.06] flex-wrap gap-2">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-slate-400 block">Bağlanan Model:</span>
-                  <p className="font-semibold text-emerald-600 dark:text-emerald-400">{scrapeResult.associatedProduct}</p>
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block">Katalogdaki Model:</span>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <p className="font-semibold text-emerald-600 dark:text-emerald-400">{scrapeResult.associatedProduct}</p>
+                    {scrapeResult.productCategory && <Badge variant="cyan">{scrapeResult.productCategory}</Badge>}
+                  </div>
                 </div>
                 <div className="text-right">
                   <span className="text-[10px] font-mono uppercase text-slate-400 block">İşlenen Yorum:</span>
@@ -302,6 +319,21 @@ export default function ImportPage() {
                 <div className="rounded-xl bg-slate-100 dark:bg-white/[0.03] p-3 text-xs border border-slate-200 dark:border-white/[0.06]">
                   <span className="text-[10px] font-mono uppercase text-slate-400 block mb-1">Örnek Yapay Zeka İncelemesi:</span>
                   <p className="italic text-slate-700 dark:text-slate-300">"{scrapeResult.sampleReview}"</p>
+                </div>
+              )}
+
+              {scrapeResult.productId && (
+                <div className="pt-2 flex items-center justify-between border-t border-slate-200 dark:border-white/[0.06]">
+                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                    {scrapeResult.isNewProductCreated ? '✓ Canlı Ürün Kataloğa Eklendi & Teşhis Edildi' : '✓ Mevcut Ürün Veritabanına Eklendi'}
+                  </span>
+                  <Link
+                    href={`/products/${scrapeResult.productId}`}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-950 text-xs font-bold shadow hover:scale-105 transition-all cursor-pointer"
+                  >
+                    <span>Ürünü Panelde İncele</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
                 </div>
               )}
             </div>

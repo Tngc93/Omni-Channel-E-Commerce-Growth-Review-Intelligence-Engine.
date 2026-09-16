@@ -1,3 +1,9 @@
+export interface ScrapedReviewItem {
+  comment: string;
+  rating: number;
+  author?: string;
+}
+
 export interface ScrapedProductInfo {
   url: string;
   channel: string;
@@ -6,6 +12,8 @@ export interface ScrapedProductInfo {
   extractedDescription?: string;
   extractedImage?: string;
   extractedPrice?: number;
+  detectedCategory: string;
+  scrapedReviews: ScrapedReviewItem[];
   botProtectionDetected: boolean;
   statusCode: number;
   liveDataExtracted: boolean;
@@ -39,7 +47,103 @@ export class HybridLiveScraper {
   }
 
   /**
-   * Fetches real live product metadata from any public e-commerce link
+   * Classifies product category dynamically from title and description keywords
+   */
+  static classifyCategory(title: string = '', description: string = ''): string {
+    const text = `${title} ${description}`.toLowerCase();
+
+    const techKeywords = [
+      'laptop', 'bilgisayar', 'kulaklık', 'headphone', 'earphone', 'oled', 'intel', 'amd', 'rtx', 'phone',
+      'telefon', 'klavye', 'keyboard', 'mouse', 'charger', 'şarj', 'speaker', 'hoparlör', 'bluetooth',
+      'wireless', 'kablosuz', 'gaming', 'oyun', 'tablet', 'monitör', 'ekran', 'display', 'smartwatch', 'saat'
+    ];
+    if (techKeywords.some((kw) => text.includes(kw))) {
+      return 'Consumer Electronics';
+    }
+
+    const fashionKeywords = [
+      'blazer', 'ceket', 'jacket', 'pantolon', 'pants', 'shirt', 'gömlek', 'dress', 'elbise', 'ayakkabı',
+      'shoe', 'sneaker', 'wool', 'yün', 'kumaş', 'fabric', 'beden', 'size', 'slim fit', 'oversize', 't-shirt',
+      'çanta', 'bag', 'deri', 'leather', 'mont', 'coat', 'suit', 'takım'
+    ];
+    if (fashionKeywords.some((kw) => text.includes(kw))) {
+      return 'Fashion & Apparel';
+    }
+
+    const beautyKeywords = [
+      'serum', 'krem', 'cream', 'lotion', 'losyon', 'cilt', 'skin', 'skincare', 'peptide', 'peptit',
+      'parfüm', 'perfume', 'shampoo', 'şampuan', 'maske', 'mask', 'tonik', 'damlalık', 'makyaj', 'makeup',
+      'lipstick', 'ruj', 'anti-aging', 'nemlendirici', 'göz', 'saç', 'hair'
+    ];
+    if (beautyKeywords.some((kw) => text.includes(kw))) {
+      return 'Beauty & Skincare';
+    }
+
+    const homeKeywords = [
+      'espresso', 'kahve', 'coffee', 'makine', 'machine', 'tencere', 'pot', 'tava', 'pan', 'blender',
+      'mutfak', 'kitchen', 'conta', 'gasket', 'vacuum', 'süpürge', 'airfryer', 'fırın', 'oven', 'çay',
+      'tea', 'kettle', 'toaster', 'tost', 'robot', 'bulaşık', 'çamaşır', 'ütü', 'iron'
+    ];
+    if (homeKeywords.some((kw) => text.includes(kw))) {
+      return 'Home & Kitchen';
+    }
+
+    return 'General Marketplace';
+  }
+
+  /**
+   * Extracts real customer reviews from HTML pages
+   */
+  static extractReviewsFromHtml(html: string): ScrapedReviewItem[] {
+    const reviews: ScrapedReviewItem[] = [];
+
+    // 1. Amazon Review Parsing Regex
+    // Amazon review body: data-hook="review-body"
+    const amazonBodyRegex = /data-hook=["']review-body["'][^>]*>[\s\S]*?<span[^>]*>([\s\S]*?)<\/span>/gi;
+    let match: RegExpExecArray | null;
+
+    while ((match = amazonBodyRegex.exec(html)) !== null && reviews.length < 15) {
+      let rawComment = match[1].replace(/<[^>]*>?/gm, '').trim();
+      if (rawComment.length > 15) {
+        reviews.push({
+          comment: rawComment,
+          rating: 4, // default, will refine if star rating matches
+          author: 'Doğrulanmış Amazon Müşterisi',
+        });
+      }
+    }
+
+    // If Amazon star ratings can be paired
+    const starRegex = /data-hook=["']review-star-rating["'][^>]*>[\s\S]*?<span[^>]*>([0-9.,]+)/gi;
+    let starIdx = 0;
+    while ((match = starRegex.exec(html)) !== null && starIdx < reviews.length) {
+      const parsed = parseFloat(match[1].replace(',', '.'));
+      if (!isNaN(parsed) && parsed >= 1 && parsed <= 5) {
+        reviews[starIdx].rating = Math.round(parsed);
+      }
+      starIdx++;
+    }
+
+    // 2. Generic / Shopify Review App Parsing (Judge.me, Loox, Native)
+    if (reviews.length === 0) {
+      const genericRegex = /(?:class=["'](?:jdgm-rev__body|spr-review-body|loox-review-content|comment-text)["'][^>]*>)([\s\S]*?)<\/(?:div|p)>/gi;
+      while ((match = genericRegex.exec(html)) !== null && reviews.length < 15) {
+        let rawComment = match[1].replace(/<[^>]*>?/gm, '').trim();
+        if (rawComment.length > 15) {
+          reviews.push({
+            comment: rawComment,
+            rating: 4,
+            author: 'Doğrulanmış Mağaza Müşterisi',
+          });
+        }
+      }
+    }
+
+    return reviews;
+  }
+
+  /**
+   * Fetches real live product metadata and reviews from any public e-commerce link
    */
   static async fetchProductLive(url: string): Promise<ScrapedProductInfo> {
     const channel = this.detectChannel(url);
@@ -52,6 +156,8 @@ export class HybridLiveScraper {
         url,
         channel,
         isShopify: false,
+        detectedCategory: 'General Marketplace',
+        scrapedReviews: [],
         botProtectionDetected: false,
         statusCode: 400,
         liveDataExtracted: false,
@@ -75,14 +181,18 @@ export class HybridLiveScraper {
           const shopifyData = await shopifyRes.json();
           const prod = shopifyData.product;
           if (prod && prod.title) {
+            const desc = prod.body_html ? prod.body_html.replace(/<[^>]*>?/gm, '').slice(0, 300) : '';
+            const category = this.classifyCategory(prod.title, desc);
             return {
               url,
               channel: 'Shopify Direct',
               isShopify: true,
               extractedTitle: prod.title,
-              extractedDescription: prod.body_html ? prod.body_html.replace(/<[^>]*>?/gm, '').slice(0, 300) : undefined,
+              extractedDescription: desc || undefined,
               extractedImage: prod.images?.[0]?.src,
               extractedPrice: parseFloat(prod.variants?.[0]?.price) || undefined,
+              detectedCategory: category,
+              scrapedReviews: [],
               botProtectionDetected: false,
               statusCode: 200,
               liveDataExtracted: true,
@@ -172,6 +282,12 @@ export class HybridLiveScraper {
         extractedDescription = descMatch[1].trim().slice(0, 300);
       }
 
+      // Extract real reviews if present in HTML
+      const scrapedReviews = this.extractReviewsFromHtml(html);
+
+      // Classify category from extracted title and description
+      const detectedCategory = this.classifyCategory(extractedTitle, extractedDescription);
+
       return {
         url,
         channel,
@@ -179,15 +295,19 @@ export class HybridLiveScraper {
         extractedTitle,
         extractedDescription,
         extractedImage,
+        detectedCategory,
+        scrapedReviews,
         botProtectionDetected,
         statusCode,
         liveDataExtracted: Boolean(extractedTitle && extractedTitle.length > 3),
       };
-    } catch (err: any) {
+    } catch {
       return {
         url,
         channel,
         isShopify: false,
+        detectedCategory: 'General Marketplace',
+        scrapedReviews: [],
         botProtectionDetected: true,
         statusCode: 504,
         liveDataExtracted: false,

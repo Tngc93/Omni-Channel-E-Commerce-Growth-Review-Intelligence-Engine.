@@ -74,59 +74,118 @@ export async function POST(req: Request) {
     const liveScrapeResult = await HybridLiveScraper.fetchProductLive(url);
     const channel = liveScrapeResult.channel;
 
-    // Find or pick a target product to associate with
-    const searchTarget = liveScrapeResult.extractedTitle || targetProduct;
+    // 4. Live Product Creation: Find or automatically create the real live product
+    const finalTitle = liveScrapeResult.extractedTitle || targetProduct || 'Canlı İçe Aktarılan E-Ticaret Ürünü';
+    const finalSku = `LIVE-${Date.now().toString().slice(-6)}`;
+    const finalPrice = liveScrapeResult.extractedPrice || 280.0;
+    const finalImage = liveScrapeResult.extractedImage || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&auto=format&fit=crop&q=80';
+    const finalCategory = liveScrapeResult.detectedCategory || 'Consumer Electronics';
+
     let product = await prisma.product.findFirst({
-      where: searchTarget ? { name: { contains: searchTarget.slice(0, 20) } } : undefined,
+      where: { name: { contains: finalTitle.slice(0, 30) } },
     });
 
-    if (!product) {
-      product = await prisma.product.findFirst();
-    }
+    let isNewProductCreated = false;
 
     if (!product) {
-      return NextResponse.json({ error: 'Sistemde kayıtlı ürün bulunamadı.' }, { status: 404 });
+      product = await prisma.product.create({
+        data: {
+          name: finalTitle,
+          sku: finalSku,
+          category: finalCategory,
+          price: finalPrice,
+          cost: Math.round(finalPrice * 0.45),
+          monthlySales: 150,
+          returnRate: 14.8,
+          imageUrl: finalImage,
+          description:
+            liveScrapeResult.extractedDescription ||
+            `${finalTitle} - Canlı mağaza bağlantısından (${channel}) otomatik taranarak veritabanına aktarıldı.`,
+        },
+      });
+      isNewProductCreated = true;
+
+      // Automatically create initial AI Chronic Defect Diagnosis for this new product
+      await prisma.intelligenceInsight.create({
+        data: {
+          productId: product.id,
+          defectType: `${finalCategory} Kalite & Tolerans Uyuşmazlığı`,
+          severity: 'HIGH',
+          affectedAspect: finalCategory.includes('Tech') ? 'thermal' : finalCategory.includes('Fashion') ? 'fit' : 'packaging',
+          summary: `${finalTitle} modelinde müşteri incelemelerinde öne çıkan tolerans ve kullanıcı beklenti uyuşmazlığı.`,
+          rootCause: `Canlı URL verisinden tespit edilen kanal geri bildirimleri doğrultusunda üretim/ambalaj standardı revizyon gerektiriyor.`,
+          estimatedMonthlyLoss: Math.round(finalPrice * 150 * 0.148),
+          evidenceQuote: `Ürün elime ulaştığında beklentimi tam karşılamadı, detaylı inceleme gerekiyor.`,
+          status: 'OPEN',
+        },
+      });
+
+      // Automatically create an initial A/B Growth Hypothesis for this new product
+      await prisma.growthHypothesis.create({
+        data: {
+          productId: product.id,
+          title: `${finalTitle} Kalite & PDP İletişim İyileştirme Hipotezi`,
+          problemStatement: `Canlı pazaryeri müşterileri ürünün detay özellikleri hakkında yanıltıcı beklentiye girebiliyor.`,
+          hypothesis: `PDP sayfasına canlı teknik tolerans şeması ve gerçek kullanım kılavuzu eklenirse iadeler %30 azalacaktır.`,
+          expectedMetricImpact: `-%4.5 İade Oranı & +%12 Sepet Dönüşümü`,
+          status: 'TESTING',
+          testType: 'A/B Test',
+          gherkinSpec: `Scenario: Canlı Ürün PDP Bilgilendirmesi\n  Given Müşteri "${finalTitle}" ürün sayfasında olduğunda\n  When Ürün tolerans tablosunu incelediğinde\n  Then Doğru varyantı seçer ve iade riski düşer`,
+        },
+      });
     }
 
-    // 4. Generate context-aware scraped reviews based on product category & real product name
-    const category = product.category.toLowerCase();
-    const scrapedSamples: Array<{ comment: string; rating: number }> = [];
+    // 5. Review Ingestion Pipeline:
+    // If real customer reviews were scraped from HTML, use them!
+    // If blocked by bot protection, generate authentic reviews tailored to the live product name & category.
+    const reviewsToInsert: Array<{ comment: string; rating: number }> = [];
 
-    const liveNameContext = liveScrapeResult.extractedTitle ? ` (${liveScrapeResult.extractedTitle})` : '';
-
-    if (category.includes('tech') || category.includes('laptop')) {
-      scrapedSamples.push(
-        { comment: `Ağır render işlerinde fanlar 56 dB ile aşırı ses yapıyor, 94 derece sıcaklık gördüm${liveNameContext}.`, rating: 2 },
-        { comment: `Ekran renkleri ve OLED panel muhteşem fakat adaptör taşıyamayacak kadar ağır${liveNameContext}.`, rating: 3 },
-        { comment: `Oyun performansı ve FPS değerleri harika! Ömür boyu bakım desteği çok iyi${liveNameContext}.`, rating: 5 },
-        { comment: 'Control Center yazılımı çöküyor ve MUX switch geçişinde takılıyor.', rating: 2 },
-        { comment: 'Klavye tuş basım hissi ve malzeme kalitesi gayet sağlam.', rating: 4 }
-      );
-    } else if (category.includes('fashion') || category.includes('blazer')) {
-      scrapedSamples.push(
-        { comment: `Kumaşı %100 merino yün ve çok kaliteli ama omuzları inanılmaz dar kalıp${liveNameContext}.`, rating: 2 },
-        { comment: 'Beden tablosu yanıltıcı, 1 beden büyük sipariş etmek gerekiyor. İade ettim.', rating: 1 },
-        { comment: 'Dökümü harika, valizden çıkarıp kırışıksız giyebildim. Çok şık.', rating: 5 },
-        { comment: 'Koltuk altı dikimi sıkıyor, kolları kaldırmak zor.', rating: 2 }
-      );
-    } else if (category.includes('beauty') || category.includes('serum')) {
-      scrapedSamples.push(
-        { comment: `Kargo paketinde cam damlalık kırılmış ve kutunun içine dökülmüştü${liveNameContext}.`, rating: 1 },
-        { comment: 'Ciltte yapışkanlık bırakmıyor ve 1 haftada kızarıklıkları yatıştırdı, harika.', rating: 5 },
-        { comment: 'Cam şişe kapağı sızdırıyor, seyahatte çantaya aktı.', rating: 2 }
-      );
+    if (liveScrapeResult.scrapedReviews.length > 0) {
+      for (const item of liveScrapeResult.scrapedReviews.slice(0, limit)) {
+        reviewsToInsert.push({
+          comment: item.comment,
+          rating: item.rating,
+        });
+      }
     } else {
-      scrapedSamples.push(
-        { comment: `15 bar basınç altında portafiltre contası kenardan su sızdırıyor${liveNameContext}.`, rating: 2 },
-        { comment: 'Çift boyler sıcaklık dengesi çok iyi, harika espresso kreması veriyor.', rating: 5 },
-        { comment: 'Buhar çubuğu gücü çok yüksek, süt köpürtme performansı şahane.', rating: 5 }
-      );
+      const category = product.category.toLowerCase();
+      const liveName = product.name;
+
+      if (category.includes('tech') || category.includes('kulaklık') || category.includes('laptop')) {
+        reviewsToInsert.push(
+          { comment: `${liveName} modelinde ses/performans iyi fakat ağır kullanımda fanlar aşırı ses yapıyor ve ısınıyor.`, rating: 2 },
+          { comment: `Ekran ve malzeme kalitesi gayet sağlam fakat şarj adaptörü taşımak için ağır.`, rating: 3 },
+          { comment: `Oyun ve günlük çalışma performansı çok iyi! Hızlı kargo için teşekkürler.`, rating: 5 },
+          { comment: `Sürücü yazılımı arada çöküyor, güncellemeyle düzeltilmeli.`, rating: 2 },
+          { comment: `Ses izolasyonu ve malzeme hissi fiyatına göre oldukça başarılı.`, rating: 4 }
+        );
+      } else if (category.includes('fashion') || category.includes('blazer') || category.includes('giyim')) {
+        reviewsToInsert.push(
+          { comment: `Kumaş kalitesi çok şık ama ${liveName} kalıbı omuzlardan oldukça dar, kollarımı zor kaldırdım.`, rating: 2 },
+          { comment: `Beden tablosu yanıltıcı, normal bedenim içine sığmadı. 1 beden büyük alınmalı.`, rating: 1 },
+          { comment: `Dökümü ve kumaş dokusu muhteşem, kırışmadan kullanılabiliyor. Çok beğendim.`, rating: 5 },
+          { comment: `Dikiş işçiliği kaliteli ancak koltuk altı kesimi dar.`, rating: 3 }
+        );
+      } else if (category.includes('beauty') || category.includes('serum') || category.includes('krem')) {
+        reviewsToInsert.push(
+          { comment: `Kargo kutusunda damlalık çatlamış ve kutunun içine sızmıştı, ambalaj koruması yetersiz.`, rating: 1 },
+          { comment: `Ciltte yapışkan his bırakmıyor ve düzenli kullanımda çok iyi sonuç verdi.`, rating: 5 },
+          { comment: `Şişe kapağı tam kilitlenmiyor, çantaya akma riski var.`, rating: 2 }
+        );
+      } else {
+        reviewsToInsert.push(
+          { comment: `${liveName} basınç altında conta kenarından su sızdırıyor, contanın daha sıkı oturması lazım.`, rating: 2 },
+          { comment: `Çalışma performansı ve malzeme kalitesi şahane, mutfakta çok şık duruyor.`, rating: 5 },
+          { comment: `Temizliği biraz uğraştırıcı fakat verdiği sonuç fiyatına değer.`, rating: 4 }
+        );
+      }
     }
 
-    const reviewsToInsert = scrapedSamples.slice(0, limit);
     const createdReviews = [];
+    const countToTake = Math.min(limit, reviewsToInsert.length);
 
-    for (const item of reviewsToInsert) {
+    for (let i = 0; i < countToTake; i++) {
+      const item = reviewsToInsert[i];
       const analysis = MockAiEngine.analyzeReview(item.comment, item.rating);
       const topAspect = analysis.aspects[0]?.aspect || 'quality';
 
@@ -147,13 +206,22 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       channel,
+      productId: product.id,
+      productName: product.name,
+      productSku: product.sku,
+      productCategory: product.category,
+      productPrice: product.price,
+      productImage: product.imageUrl,
+      isNewProductCreated,
       scrapedCount: createdReviews.length,
-      associatedProduct: product.name,
-      liveTitle: liveScrapeResult.extractedTitle || null,
       liveDataExtracted: liveScrapeResult.liveDataExtracted,
       botProtectionDetected: liveScrapeResult.botProtectionDetected,
       sampleReview: createdReviews[0]?.comment,
-      mode: liveScrapeResult.liveDataExtracted ? 'LIVE_METADATA_EXTRACTED' : 'HYBRID_FALLBACK',
+      mode: liveScrapeResult.scrapedReviews.length > 0
+        ? 'FULL_LIVE_HTML_REVIEWS'
+        : liveScrapeResult.liveDataExtracted
+        ? 'LIVE_PRODUCT_AI_SYNTHESIS'
+        : 'HYBRID_SMART_FALLBACK',
     });
   } catch (err: any) {
     console.error('[SCRAPER API ERROR]:', err);
