@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id           String   @id @default(cuid())
+  name         String
+  sku          String   @unique
+  category     String
+  price        Float
+  cost         Float
+  monthlySales Int      @default(0)
+  returnRate   Float    @default(0.0)
+  imageUrl     String?
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  reviews    Review[]
+  returns    ReturnLog[]
+  insights   IntelligenceInsight[]
+  hypotheses GrowthHypothesis[]
+}
+
+model Review {
+  id               String   @id @default(cuid())
+  productId        String
+  rating           Int
+  title            String?
+  comment          String
+  channel          String   @default("Shopify")
+  aspect           String   @default("general")
+  sentiment        String   @default("neutral")
+  sentimentScore   Float    @default(0.0)
+  verifiedPurchase Boolean  @default(true)
+  customerName     String?
+  createdAt        DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ReturnLog {
+  id           String   @id @default(cuid())
+  productId    String
+  reason       String
+  orderValue   Float
+  returnCost   Float    @default(12.50)
+  customerNote String?
+  createdAt    DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model IntelligenceInsight {
+  id                   String   @id @default(cuid())
+  productId            String
+  defectType           String
+  severity             String   @default("MEDIUM") // CRITICAL, HIGH, MEDIUM, LOW
+  affectedAspect       String   @default("fit")
+  summary              String
+  rootCause            String
+  estimatedMonthlyLoss Float    @default(0.0)
+  evidenceQuote        String?
+  status               String   @default("OPEN")
+  createdAt            DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model GrowthHypothesis {
+  id                   String   @id @default(cuid())
+  productId            String
+  title                String
+  problemStatement     String
+  hypothesis           String
+  expectedMetricImpact String
+  status               String   @default("DRAFT") // DRAFT, TESTING, VALIDATED, ARCHIVED
+  testType             String   @default("A/B Test")
+  gherkinSpec          String?
+  createdAt            DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
