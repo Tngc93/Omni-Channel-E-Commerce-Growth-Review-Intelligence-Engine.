@@ -19,9 +19,9 @@ export function DefectRadarChart({ data }: DefectRadarChartProps) {
     <Card className="col-span-1 lg:col-span-2">
       <CardHeader>
         <div>
-          <CardTitle>Aspect Defect & Return Vulnerability Radar</CardTitle>
+          <CardTitle>Donanım & Teknoloji Zafiyet Radarı</CardTitle>
           <CardDescription>
-            Multi-dimensional sensitivity score across customer complaint categories
+            Laptop, monitör ve masaüstü sistemlerde müşteri şikayetleri ve iade marj etkisi
           </CardDescription>
         </div>
       </CardHeader>
@@ -29,44 +29,45 @@ export function DefectRadarChart({ data }: DefectRadarChartProps) {
       <div className="h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={data}>
-            <PolarGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-            <PolarAngleAxis dataKey="aspect" stroke="#64748b" tick={{ fill: '#64748b', fontSize: 12 }} />
-            <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#cbd5e1" />
+            <PolarGrid stroke="rgba(255, 255, 255, 0.08)" strokeDasharray="3 3" />
+            <PolarAngleAxis dataKey="aspect" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+            <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="rgba(255, 255, 255, 0.06)" />
             <Radar
-              name="Complaint Volume"
+              name="Şikayet Hacmi"
               dataKey="complaintScore"
-              stroke="#ef4444"
-              fill="#ef4444"
-              fillOpacity={0.4}
+              stroke="#f43f5e"
+              fill="#f43f5e"
+              fillOpacity={0.35}
             />
             <Radar
-              name="Return Impact"
+              name="İade & Marj Maliyeti"
               dataKey="returnImpact"
               stroke="#10b981"
               fill="#10b981"
-              fillOpacity={0.3}
+              fillOpacity={0.25}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#0f172a',
-                borderColor: '#1e293b',
+                backgroundColor: 'rgba(10, 15, 26, 0.95)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
                 color: '#fff',
-                borderRadius: '8px',
+                borderRadius: '12px',
                 fontSize: '12px',
+                backdropFilter: 'blur(16px)',
               }}
             />
           </RadarChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-3 flex items-center justify-center gap-6 text-xs text-slate-500">
+      <div className="mt-3 flex items-center justify-center gap-6 text-xs text-slate-400">
         <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-rose-500" />
-          <span>Negative Feedback Volume</span>
+          <span className="h-2 w-2 rounded-full bg-rose-500" />
+          <span>Şikayet & Yorum Yoğunluğu</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-          <span>Dollar Margin Impact Weight</span>
+          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+          <span>Dolar Marj Kaybı Ağırlığı</span>
         </div>
       </div>
     </Card>

@@ -2,28 +2,41 @@ import React from 'react';
 import { cn } from '@/lib/utils/cn';
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'default' | 'success' | 'warning' | 'danger' | 'outline' | 'purple';
+  variant?: 'default' | 'success' | 'warning' | 'danger' | 'outline' | 'purple' | 'cyan';
+  dot?: boolean;
 }
 
-export function Badge({ children, variant = 'default', className, ...props }: BadgeProps) {
+export function Badge({ children, variant = 'default', dot = true, className, ...props }: BadgeProps) {
   const variantStyles = {
-    default: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200',
-    success: 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800',
-    warning: 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800',
-    danger: 'bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800',
-    outline: 'border border-slate-300 text-slate-700 dark:border-slate-700 dark:text-slate-300',
-    purple: 'bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-950/40 dark:text-purple-400 dark:border-purple-800',
+    default: 'bg-white/[0.06] text-slate-300 border-white/[0.08]',
+    success: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/25',
+    warning: 'bg-amber-500/10 text-amber-300 border-amber-500/25',
+    danger: 'bg-rose-500/10 text-rose-300 border-rose-500/25',
+    outline: 'bg-transparent text-slate-300 border-white/15',
+    purple: 'bg-purple-500/10 text-purple-300 border-purple-500/25',
+    cyan: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/25',
+  };
+
+  const dotColors = {
+    default: 'bg-slate-400',
+    success: 'bg-emerald-400',
+    warning: 'bg-amber-400',
+    danger: 'bg-rose-400',
+    outline: 'bg-slate-400',
+    purple: 'bg-purple-400',
+    cyan: 'bg-cyan-400',
   };
 
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide transition-colors',
+        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium tracking-tight backdrop-blur-md',
         variantStyles[variant],
         className
       )}
       {...props}
     >
+      {dot && <span className={cn('h-1.5 w-1.5 rounded-full', dotColors[variant])} />}
       {children}
     </span>
   );

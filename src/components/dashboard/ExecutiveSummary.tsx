@@ -1,5 +1,5 @@
 import React from 'react';
-import { DollarSign, TrendingDown, MessageSquare, AlertTriangle } from 'lucide-react';
+import { DollarSign, TrendingDown, Cpu, AlertTriangle } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { formatCurrency, formatPercent } from '@/lib/utils/formatters';
 
@@ -18,71 +18,75 @@ export function ExecutiveSummary({
 }: ExecutiveSummaryProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <Card className="border-l-4 border-l-rose-500">
+      <Card className="relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl group-hover:bg-rose-500/20 transition-all pointer-events-none" />
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium uppercase tracking-wider text-slate-500">
-            Est. Monthly Return Waste
+          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+            Aylık İade & Donanım Kaybı
           </span>
-          <div className="rounded-full bg-rose-50 p-2 dark:bg-rose-950/40">
-            <DollarSign className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+          <div className="rounded-xl bg-rose-500/10 p-2 text-rose-400 border border-rose-500/20">
+            <DollarSign className="h-4 w-4" />
           </div>
         </div>
-        <div className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <div className="mt-3 text-2xl font-bold tracking-tight text-white font-mono">
           {formatCurrency(totalEstimatedLoss)}
         </div>
-        <p className="mt-1 text-xs text-slate-500">
-          From returns, shipping friction & packaging failures
+        <p className="mt-1 text-xs text-slate-400">
+          Isınma, panel ölü piksel ve kargo şoku kaynaklı
         </p>
       </Card>
 
-      <Card className="border-l-4 border-l-amber-500">
+      <Card className="relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all pointer-events-none" />
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium uppercase tracking-wider text-slate-500">
-            Avg Catalog Return Rate
+          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+            Ortalama İade Oranı
           </span>
-          <div className="rounded-full bg-amber-50 p-2 dark:bg-amber-950/40">
-            <TrendingDown className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+          <div className="rounded-xl bg-amber-500/10 p-2 text-amber-400 border border-amber-500/20">
+            <TrendingDown className="h-4 w-4" />
           </div>
         </div>
-        <div className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <div className="mt-3 text-2xl font-bold tracking-tight text-white font-mono">
           {formatPercent(avgReturnRate)}
         </div>
-        <p className="mt-1 text-xs text-slate-500">
-          Benchmark target: &lt; 9.5% across peer catalogs
+        <p className="mt-1 text-xs text-slate-400">
+          Oyun laptopu & monitör sektörel eşik: &lt; %10.5
         </p>
       </Card>
 
-      <Card className="border-l-4 border-l-emerald-500">
+      <Card className="relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all pointer-events-none" />
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium uppercase tracking-wider text-slate-500">
-            Reviews & Returns Analyzed
+          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+            İncelenen Donanım Yorumu
           </span>
-          <div className="rounded-full bg-emerald-50 p-2 dark:bg-emerald-950/40">
-            <MessageSquare className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          <div className="rounded-xl bg-emerald-500/10 p-2 text-emerald-400 border border-emerald-500/20">
+            <Cpu className="h-4 w-4" />
           </div>
         </div>
-        <div className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-          {totalReviewsAnalyzed}
+        <div className="mt-3 text-2xl font-bold tracking-tight text-white font-mono">
+          {totalReviewsAnalyzed} Doğrulanmış
         </div>
-        <p className="mt-1 text-xs text-slate-500">
-          Multi-channel (Shopify, Amazon, Trendyol)
+        <p className="mt-1 text-xs text-slate-400">
+          Monster Web, Trendyol, Hepsiburada, Amazon TR
         </p>
       </Card>
 
-      <Card className="border-l-4 border-l-purple-500">
+      <Card className="relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all pointer-events-none" />
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium uppercase tracking-wider text-slate-500">
-            Chronic Product Defects
+          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+            Kronik Donanım Kusurları
           </span>
-          <div className="rounded-full bg-purple-50 p-2 dark:bg-purple-950/40">
-            <AlertTriangle className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          <div className="rounded-xl bg-purple-500/10 p-2 text-purple-400 border border-purple-500/20">
+            <AlertTriangle className="h-4 w-4" />
           </div>
         </div>
-        <div className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-          {criticalDefectsCount} Urgent
+        <div className="mt-3 text-2xl font-bold tracking-tight text-white font-mono">
+          {criticalDefectsCount} Aktif Teşhis
         </div>
-        <p className="mt-1 text-xs text-slate-500">
-          Actionable A/B test hypotheses prepared
+        <p className="mt-1 text-xs text-slate-400">
+          PM & Ar-Ge ekipleri için A/B hipotezleri hazır
         </p>
       </Card>
     </div>

@@ -5,7 +5,7 @@ export function Card({ className, children, ...props }: React.HTMLAttributes<HTM
   return (
     <div
       className={cn(
-        'rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900',
+        'apple-glass-card rounded-2xl p-6 transition-all duration-300 hover:border-white/15',
         className
       )}
       {...props}
@@ -20,9 +20,9 @@ export function CardHeader({ className, children, ...props }: React.HTMLAttribut
 }
 
 export function CardTitle({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={cn('text-lg font-semibold tracking-tight text-slate-900 dark:text-white', className)} {...props}>{children}</h3>;
+  return <h3 className={cn('text-base font-semibold tracking-tight text-white/95', className)} {...props}>{children}</h3>;
 }
 
 export function CardDescription({ className, children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={cn('text-sm text-slate-500 dark:text-slate-400', className)} {...props}>{children}</p>;
+  return <p className={cn('text-xs text-slate-400/90 leading-relaxed', className)} {...props}>{children}</p>;
 }
