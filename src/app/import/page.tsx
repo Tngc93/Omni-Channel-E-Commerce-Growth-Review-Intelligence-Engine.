@@ -4,10 +4,18 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { UploadCloud, CheckCircle2, Sparkles, PlusCircle, Laptop, Shirt, Coffee } from 'lucide-react';
+import {
+  UploadCloud,
+  CheckCircle2,
+  Sparkles,
+  PlusCircle,
+  Globe,
+  ArrowRight,
+  ExternalLink
+} from 'lucide-react';
 
 export default function ImportPage() {
-  const [activeTab, setActiveTab] = useState<'reviews' | 'product'>('reviews');
+  const [activeTab, setActiveTab] = useState<'reviews' | 'product' | 'scraper'>('scraper');
   const [productName, setProductName] = useState('');
   const [channel, setChannel] = useState('Amazon Global');
   const [comment, setComment] = useState('');
@@ -15,12 +23,16 @@ export default function ImportPage() {
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // New product fields
+  // Product tab fields
   const [newProdName, setNewProdName] = useState('');
   const [newProdCategory, setNewProdCategory] = useState('Consumer Electronics');
   const [newProdSku, setNewProdSku] = useState('');
   const [newProdPrice, setNewProdPrice] = useState(1200);
   const [newProdDesc, setNewProdDesc] = useState('');
+
+  // Scraper tab fields
+  const [scrapeUrl, setScrapeUrl] = useState('https://www.amazon.com/dp/B0CX219XPRO');
+  const [scrapeLimit, setScrapeLimit] = useState(5);
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,6 +97,36 @@ export default function ImportPage() {
     }
   };
 
+  const handleScrapeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!scrapeUrl.trim()) return;
+    setLoading(true);
+    setStatus(null);
+
+    try {
+      const res = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: scrapeUrl,
+          limit: Number(scrapeLimit),
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setStatus(`✓ ${data.channel} üzerinden ${data.scrapedCount} adet müşteri yorumu başarıyla çekildi ve '${data.associatedProduct}' ürününe bağlandı!`);
+      } else {
+        setStatus(`Hata: ${data.error}`);
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus('Kazıma sırasında ağ hatası oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6 apple-bg-glow">
       <div>
@@ -96,12 +138,25 @@ export default function ImportPage() {
           Çok Kanallı Veri Aktarımı & Ürün Yönetimi
         </h1>
         <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
-          Shopify, Trendyol, Hepsiburada ve Amazon'dan gelen müşteri incelemelerini anlık olarak içe aktarın veya platforma yeni bir kategori ve ürün ekleyin.
+          Herhangi bir e-ticaret linkini kazıyarak yorumları çekin, tekil inceleme metinlerini içe aktarın veya platforma yeni bir ürün kategorisi tanımlayın.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 p-1.5 rounded-2xl bg-white/80 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] w-fit shadow-sm">
+      <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-white/80 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] w-fit shadow-sm">
+        <button
+          onClick={() => { setActiveTab('scraper'); setStatus(null); }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
+            activeTab === 'scraper'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-semibold shadow-md'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Globe className="h-4 w-4" />
+          <span>Canlı URL Yorum Kazıyıcı</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-bold">YENİ</span>
+        </button>
+
         <button
           onClick={() => { setActiveTab('reviews'); setStatus(null); }}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
@@ -111,7 +166,7 @@ export default function ImportPage() {
           }`}
         >
           <UploadCloud className="h-4 w-4" />
-          <span>Müşteri Yorumu İçe Aktar</span>
+          <span>Manuel Yorum Girişi</span>
         </button>
 
         <button
@@ -123,7 +178,7 @@ export default function ImportPage() {
           }`}
         >
           <PlusCircle className="h-4 w-4" />
-          <span>Yeni Ürün / Kategori Ekle</span>
+          <span>Yeni Ürün / SKU Tanımla</span>
         </button>
       </div>
 
@@ -134,10 +189,67 @@ export default function ImportPage() {
         </div>
       )}
 
-      {activeTab === 'reviews' ? (
+      {activeTab === 'scraper' && (
         <Card className="max-w-2xl space-y-4">
           <CardHeader>
-            <CardTitle>Tekil / Toplu Yorum Girişi</CardTitle>
+            <CardTitle>Canlı Pazar Yeri URL Kazıyıcı & Yorum Çekici</CardTitle>
+            <CardDescription>
+              Herhangi bir Amazon, Trendyol, Hepsiburada veya Shopify ürün sayfasının linkini yapıştırın. Yapay zeka son yorumları otomatik çeker, ABSA ile analiz edip radara döker.
+            </CardDescription>
+          </CardHeader>
+
+          <form onSubmit={handleScrapeSubmit} className="space-y-4 text-xs">
+            <div>
+              <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">E-Ticaret Ürün URL'si:</label>
+              <div className="flex gap-2">
+                <input
+                  type="url"
+                  value={scrapeUrl}
+                  onChange={(e) => setScrapeUrl(e.target.value)}
+                  placeholder="https://www.amazon.com/dp/... veya https://www.trendyol.com/..."
+                  className="flex-1 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
+                  required
+                />
+              </div>
+              <span className="text-[11px] text-slate-400 mt-1 block">
+                Desteklenen kanallar: Amazon Global, Trendyol, Hepsiburada, Shopify Storefronts
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Çekilecek Yorum Adedi:</label>
+                <select
+                  value={scrapeLimit}
+                  onChange={(e) => setScrapeLimit(Number(e.target.value))}
+                  className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 font-mono"
+                >
+                  <option value={5}>5 Yorum (Hızlı Test)</option>
+                  <option value={10}>10 Yorum (Standart Örneklem)</option>
+                  <option value={25}>25 Yorum (Kapsamlı Analiz)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">Algılanan Kanal:</label>
+                <div className="rounded-xl bg-slate-100 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 px-3.5 py-2.5 text-slate-700 dark:text-slate-300 font-mono font-medium">
+                  {scrapeUrl.includes('amazon') ? 'Amazon Global' : scrapeUrl.includes('trendyol') ? 'Trendyol' : scrapeUrl.includes('hepsiburada') ? 'Hepsiburada' : 'Shopify / Web Store'}
+                </div>
+              </div>
+            </div>
+
+            <Button type="submit" disabled={loading || !scrapeUrl.trim()} className="w-full justify-center">
+              <Sparkles className="h-4 w-4 mr-1.5" />
+              {loading ? 'Yorumlar Çekiliyor & AI ile Etiketleniyor...' : 'Kazımayı Başlat & Yapay Zeka ile Analiz Et'}
+            </Button>
+          </form>
+        </Card>
+      )}
+
+      {activeTab === 'reviews' && (
+        <Card className="max-w-2xl space-y-4">
+          <CardHeader>
+            <CardTitle>Tekil / Manuel Yorum Girişi</CardTitle>
             <CardDescription>
               İnceleme metnini yapıştırın; yapay zeka sektörüne göre duygu, boyut ve iade riskini otomatik analiz edecektir.
             </CardDescription>
@@ -197,7 +309,7 @@ export default function ImportPage() {
                 rows={4}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Örn: Ceketin kalıbı omuzlardan inanılmaz sıktı, kolumu kaldıramadım... VEYA: Cam damlalık kargoda dökülmüş..."
+                placeholder="Örn: Ceketin kalıbı omuzlardan inanılmaz sıktı... VEYA: Cam damlalık kargoda kırılmış..."
                 className="w-full rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-300 dark:border-white/10 px-3.5 py-2.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 leading-relaxed"
               />
             </div>
@@ -208,7 +320,9 @@ export default function ImportPage() {
             </Button>
           </form>
         </Card>
-      ) : (
+      )}
+
+      {activeTab === 'product' && (
         <Card className="max-w-2xl space-y-4">
           <CardHeader>
             <CardTitle>Yeni Ürün / Model Tanımlama</CardTitle>
