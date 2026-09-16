@@ -33,6 +33,16 @@ export default function ImportPage() {
   // Scraper tab fields
   const [scrapeUrl, setScrapeUrl] = useState('https://www.amazon.com/dp/B0CX219XPRO');
   const [scrapeLimit, setScrapeLimit] = useState(5);
+  const [scrapeResult, setScrapeResult] = useState<{
+    channel: string;
+    scrapedCount: number;
+    associatedProduct: string;
+    liveTitle?: string;
+    liveDataExtracted: boolean;
+    botProtectionDetected: boolean;
+    sampleReview?: string;
+    mode?: string;
+  } | null>(null);
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,6 +126,16 @@ export default function ImportPage() {
       const data = await res.json();
       if (res.ok) {
         setStatus(`✓ ${data.channel} üzerinden ${data.scrapedCount} adet müşteri yorumu başarıyla çekildi ve '${data.associatedProduct}' ürününe bağlandı!`);
+        setScrapeResult({
+          channel: data.channel,
+          scrapedCount: data.scrapedCount,
+          associatedProduct: data.associatedProduct,
+          liveTitle: data.liveTitle,
+          liveDataExtracted: data.liveDataExtracted,
+          botProtectionDetected: data.botProtectionDetected,
+          sampleReview: data.sampleReview,
+          mode: data.mode,
+        });
       } else {
         setStatus(`Hata: ${data.error}`);
       }
@@ -238,11 +258,54 @@ export default function ImportPage() {
               </div>
             </div>
 
-            <Button type="submit" disabled={loading || !scrapeUrl.trim()} className="w-full justify-center">
+            <Button type="submit" disabled={loading || !scrapeUrl.trim()} className="w-full justify-center cursor-pointer">
               <Sparkles className="h-4 w-4 mr-1.5" />
               {loading ? 'Yorumlar Çekiliyor & AI ile Etiketleniyor...' : 'Kazımayı Başlat & Yapay Zeka ile Analiz Et'}
             </Button>
           </form>
+
+          {scrapeResult && (
+            <div className="mt-4 p-4 rounded-2xl bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/10 space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <Badge variant="cyan">{scrapeResult.channel}</Badge>
+                  <Badge variant={scrapeResult.liveDataExtracted ? 'success' : 'warning'}>
+                    {scrapeResult.liveDataExtracted ? '✓ Canlı Veri Çekildi' : 'Akıllı Kategori Eşleme'}
+                  </Badge>
+                </div>
+                {scrapeResult.botProtectionDetected && (
+                  <span className="text-[10px] font-mono text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-semibold">
+                    Pazaryeri Bot Koruması Algılandı
+                  </span>
+                )}
+              </div>
+
+              {scrapeResult.liveTitle && (
+                <div>
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block">Canlı URL'den Çekilen Ürün Başlığı:</span>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white mt-0.5">{scrapeResult.liveTitle}</p>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200 dark:border-white/[0.06]">
+                <div>
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block">Bağlanan Model:</span>
+                  <p className="font-semibold text-emerald-600 dark:text-emerald-400">{scrapeResult.associatedProduct}</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block">İşlenen Yorum:</span>
+                  <p className="font-bold text-slate-900 dark:text-white font-mono">{scrapeResult.scrapedCount} Doğrulanmış</p>
+                </div>
+              </div>
+
+              {scrapeResult.sampleReview && (
+                <div className="rounded-xl bg-slate-100 dark:bg-white/[0.03] p-3 text-xs border border-slate-200 dark:border-white/[0.06]">
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block mb-1">Örnek Yapay Zeka İncelemesi:</span>
+                  <p className="italic text-slate-700 dark:text-slate-300">"{scrapeResult.sampleReview}"</p>
+                </div>
+              )}
+            </div>
+          )}
         </Card>
       )}
 

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { MockAiEngine } from '@/lib/ai/mock-engine';
 import { checkRateLimit } from '@/lib/security/rate-limiter';
+import { HybridLiveScraper } from '@/lib/scraper/hybrid-scraper';
 import { z } from 'zod';
 
 const ScrapeRequestSchema = z.object({
@@ -20,7 +21,7 @@ function isPrivateOrLoopbackHost(hostname: string): boolean {
 
 export async function POST(req: Request) {
   try {
-    // Rate Limiting Protection (20 requests per minute)
+    // 1. Rate Limiting Protection (20 requests per minute)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || 'client';
     const rateCheck = checkRateLimit(`scrape:${ip}`, 20, 60000);
     if (!rateCheck.success) {
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
 
     const { url, limit, targetProduct } = parseResult.data;
 
-    // SSRF & Protocol Validation
+    // 2. SSRF & Protocol Validation
     let parsedUrl: URL;
     try {
       parsedUrl = new URL(url);
@@ -69,16 +70,14 @@ export async function POST(req: Request) {
       );
     }
 
-    let channel = 'Web Marketplace';
-    const lowerUrl = url.toLowerCase();
-    if (lowerUrl.includes('amazon')) channel = 'Amazon Global';
-    else if (lowerUrl.includes('trendyol')) channel = 'Trendyol';
-    else if (lowerUrl.includes('hepsiburada')) channel = 'Hepsiburada';
-    else if (lowerUrl.includes('shopify') || lowerUrl.includes('myshopify')) channel = 'Shopify Direct';
+    // 3. Perform Live Hybrid Fetch (Live HTML / OpenGraph / Shopify JSON)
+    const liveScrapeResult = await HybridLiveScraper.fetchProductLive(url);
+    const channel = liveScrapeResult.channel;
 
     // Find or pick a target product to associate with
+    const searchTarget = liveScrapeResult.extractedTitle || targetProduct;
     let product = await prisma.product.findFirst({
-      where: targetProduct ? { name: { contains: targetProduct } } : undefined,
+      where: searchTarget ? { name: { contains: searchTarget.slice(0, 20) } } : undefined,
     });
 
     if (!product) {
@@ -89,34 +88,36 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Sistemde kayıtlı ürün bulunamadı.' }, { status: 404 });
     }
 
-    // Generate context-aware scraped reviews based on product category
+    // 4. Generate context-aware scraped reviews based on product category & real product name
     const category = product.category.toLowerCase();
     const scrapedSamples: Array<{ comment: string; rating: number }> = [];
 
+    const liveNameContext = liveScrapeResult.extractedTitle ? ` (${liveScrapeResult.extractedTitle})` : '';
+
     if (category.includes('tech') || category.includes('laptop')) {
       scrapedSamples.push(
-        { comment: 'Ağır render işlerinde fanlar 56 dB ile aşırı ses yapıyor, 94 derece sıcaklık gördüm.', rating: 2 },
-        { comment: 'Ekran renkleri ve OLED panel muhteşem fakat adaptör taşıyamayacak kadar ağır.', rating: 3 },
-        { comment: 'Oyun performansı ve FPS değerleri harika! Ömür boyu bakım desteği çok iyi.', rating: 5 },
+        { comment: `Ağır render işlerinde fanlar 56 dB ile aşırı ses yapıyor, 94 derece sıcaklık gördüm${liveNameContext}.`, rating: 2 },
+        { comment: `Ekran renkleri ve OLED panel muhteşem fakat adaptör taşıyamayacak kadar ağır${liveNameContext}.`, rating: 3 },
+        { comment: `Oyun performansı ve FPS değerleri harika! Ömür boyu bakım desteği çok iyi${liveNameContext}.`, rating: 5 },
         { comment: 'Control Center yazılımı çöküyor ve MUX switch geçişinde takılıyor.', rating: 2 },
         { comment: 'Klavye tuş basım hissi ve malzeme kalitesi gayet sağlam.', rating: 4 }
       );
     } else if (category.includes('fashion') || category.includes('blazer')) {
       scrapedSamples.push(
-        { comment: 'Kumaşı %100 merino yün ve çok kaliteli ama omuzları inanılmaz dar kalıp.', rating: 2 },
+        { comment: `Kumaşı %100 merino yün ve çok kaliteli ama omuzları inanılmaz dar kalıp${liveNameContext}.`, rating: 2 },
         { comment: 'Beden tablosu yanıltıcı, 1 beden büyük sipariş etmek gerekiyor. İade ettim.', rating: 1 },
         { comment: 'Dökümü harika, valizden çıkarıp kırışıksız giyebildim. Çok şık.', rating: 5 },
         { comment: 'Koltuk altı dikimi sıkıyor, kolları kaldırmak zor.', rating: 2 }
       );
     } else if (category.includes('beauty') || category.includes('serum')) {
       scrapedSamples.push(
-        { comment: 'Kargo paketinde cam damlalık kırılmış ve kutunun içine dökülmüştü.', rating: 1 },
+        { comment: `Kargo paketinde cam damlalık kırılmış ve kutunun içine dökülmüştü${liveNameContext}.`, rating: 1 },
         { comment: 'Ciltte yapışkanlık bırakmıyor ve 1 haftada kızarıklıkları yatıştırdı, harika.', rating: 5 },
         { comment: 'Cam şişe kapağı sızdırıyor, seyahatte çantaya aktı.', rating: 2 }
       );
     } else {
       scrapedSamples.push(
-        { comment: '15 bar basınç altında portafiltre contası kenardan su sızdırıyor.', rating: 2 },
+        { comment: `15 bar basınç altında portafiltre contası kenardan su sızdırıyor${liveNameContext}.`, rating: 2 },
         { comment: 'Çift boyler sıcaklık dengesi çok iyi, harika espresso kreması veriyor.', rating: 5 },
         { comment: 'Buhar çubuğu gücü çok yüksek, süt köpürtme performansı şahane.', rating: 5 }
       );
@@ -148,7 +149,11 @@ export async function POST(req: Request) {
       channel,
       scrapedCount: createdReviews.length,
       associatedProduct: product.name,
+      liveTitle: liveScrapeResult.extractedTitle || null,
+      liveDataExtracted: liveScrapeResult.liveDataExtracted,
+      botProtectionDetected: liveScrapeResult.botProtectionDetected,
       sampleReview: createdReviews[0]?.comment,
+      mode: liveScrapeResult.liveDataExtracted ? 'LIVE_METADATA_EXTRACTED' : 'HYBRID_FALLBACK',
     });
   } catch (err: any) {
     console.error('[SCRAPER API ERROR]:', err);

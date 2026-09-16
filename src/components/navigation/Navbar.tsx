@@ -5,10 +5,13 @@ import Link from 'next/link';
 import { Layers, Github, ExternalLink, Store, UserCheck, ChevronDown, Check } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { LanguageToggle } from '@/components/theme/LanguageToggle';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useStoreRole, STORES, ROLES, StoreId, UserRole } from '@/lib/context/StoreRoleContext';
 
 export function Navbar() {
   const { currentStore, setStore, currentRole, setRole } = useStoreRole();
+  const { t } = useLanguage();
   const [storeOpen, setStoreOpen] = useState(false);
   const [roleOpen, setRoleOpen] = useState(false);
 
@@ -117,7 +120,10 @@ export function Navbar() {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Apple-style Language Switcher (TR / EN) */}
+        <LanguageToggle />
+
         {/* Apple-style Light / Dark Mode Switcher */}
         <ThemeToggle />
 

@@ -21,32 +21,34 @@ import {
   Coffee,
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
-
-const NAV_ITEMS = [
-  { label: 'Executive Dashboard', href: '/', icon: LayoutDashboard },
-  { label: 'Sentiment & ROI Analytics', href: '/analytics', icon: TrendingUp },
-  { label: 'Defect Spike Crisis Radar', href: '/alerts', icon: BellRing },
-  { label: 'Catalog & Chronic Defects', href: '/products', icon: ShoppingBag },
-  { label: 'Competitor Benchmark', href: '/competitors', icon: Swords },
-  { label: 'Growth & A/B Lab', href: '/hypotheses', icon: Lightbulb },
-  { label: 'Multi-Persona Chat', href: '/persona-chat', icon: MessageSquareQuote },
-  { label: 'AI Return-Save Agent', href: '/recovery', icon: MessageSquareReply },
-  { label: 'Review Ingestion & Add Product', href: '/import', icon: UploadCloud },
-  { label: 'Executive & Factory Reports', href: '/reports', icon: FileText },
-];
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { label: t.nav.dashboard, href: '/', icon: LayoutDashboard },
+    { label: t.nav.analytics, href: '/analytics', icon: TrendingUp },
+    { label: t.nav.alerts, href: '/alerts', icon: BellRing },
+    { label: t.nav.catalog, href: '/products', icon: ShoppingBag },
+    { label: t.nav.competitors, href: '/competitors', icon: Swords },
+    { label: t.nav.hypotheses, href: '/hypotheses', icon: Lightbulb },
+    { label: t.nav.personaChat, href: '/persona-chat', icon: MessageSquareQuote },
+    { label: t.nav.recovery, href: '/recovery', icon: MessageSquareReply },
+    { label: t.nav.import, href: '/import', icon: UploadCloud },
+    { label: t.nav.reports, href: '/reports', icon: FileText },
+  ];
 
   return (
     <aside className="w-64 flex-shrink-0 border-r border-slate-200/80 dark:border-white/[0.06] bg-white/70 dark:bg-[#07090e]/60 p-4 backdrop-blur-xl flex flex-col justify-between transition-colors duration-300">
       <div className="space-y-6">
         <div>
           <span className="px-3 text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500">
-            Navigation
+            {t.nav.navigation}
           </span>
           <nav className="mt-2 space-y-1">
-            {NAV_ITEMS.map((item) => {
+            {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
 
@@ -82,7 +84,7 @@ export function Sidebar() {
         {/* Multi-Vertical Indicators */}
         <div className="rounded-2xl border border-slate-200/80 dark:border-white/[0.06] bg-slate-50/80 dark:bg-white/[0.02] p-3.5 space-y-2.5">
           <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Aktif Sektörel Kapsam
+            {t.nav.activeScope}
           </span>
           <div className="space-y-1.5 text-xs">
             <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
@@ -108,10 +110,10 @@ export function Sidebar() {
       <div className="rounded-2xl border border-slate-200/80 dark:border-white/[0.06] bg-slate-50/80 dark:bg-white/[0.02] p-3">
         <div className="flex items-center justify-between text-[11px]">
           <span className="text-slate-500 dark:text-slate-400 font-medium">ReviewIQ</span>
-          <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">v2.4 Pro</span>
+          <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">{t.nav.version}</span>
         </div>
         <p className="mt-1 text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
-          Marka-Bağımsız Çok Kanallı AI Büyüme Motoru
+          {t.nav.tagline}
         </p>
       </div>
     </aside>
