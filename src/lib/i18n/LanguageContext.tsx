@@ -10,6 +10,7 @@ export interface Translations {
     analytics: string;
     alerts: string;
     catalog: string;
+    visualAi: string;
     competitors: string;
     hypotheses: string;
     personaChat: string;
@@ -48,6 +49,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       analytics: 'Memnuniyet & Gelir Analitiği',
       alerts: 'Kriz Tespit Radarı',
       catalog: 'Ürün & Kusur Kataloğu',
+      visualAi: 'Görsel Kusur & Vision AI',
       competitors: 'Rakip Kıyaslama',
       hypotheses: 'Büyüme & A/B Lab',
       personaChat: 'Müşteri Mülakatı',
@@ -84,6 +86,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       analytics: 'Sentiment & ROI Analytics',
       alerts: 'Defect Spike Crisis Radar',
       catalog: 'Catalog & Chronic Defects',
+      visualAi: 'Visual Defect & Vision AI',
       competitors: 'Competitor Benchmark',
       hypotheses: 'Growth & A/B Lab',
       personaChat: 'Multi-Persona Chat',

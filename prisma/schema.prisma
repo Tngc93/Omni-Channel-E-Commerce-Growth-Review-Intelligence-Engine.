@@ -21,10 +21,11 @@ model Product {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  reviews    Review[]
-  returns    ReturnLog[]
-  insights   IntelligenceInsight[]
-  hypotheses GrowthHypothesis[]
+  reviews         Review[]
+  returns         ReturnLog[]
+  insights        IntelligenceInsight[]
+  hypotheses      GrowthHypothesis[]
+  visualEvidences VisualEvidence[]
 }
 
 model Review {
@@ -33,6 +34,7 @@ model Review {
   rating           Int
   title            String?
   comment          String
+  photoUrl         String?
   channel          String   @default("Shopify")
   aspect           String   @default("general")
   sentiment        String   @default("neutral")
@@ -41,7 +43,8 @@ model Review {
   customerName     String?
   createdAt        DateTime @default(now())
 
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product         Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  visualEvidences VisualEvidence[]
 }
 
 model ReturnLog {
@@ -85,4 +88,25 @@ model GrowthHypothesis {
   createdAt            DateTime @default(now())
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model VisualEvidence {
+  id              String   @id @default(cuid())
+  productId       String
+  reviewId        String?
+  imageUrl        String
+  thumbnailUrl    String?
+  damageCategory  String
+  severity        String   @default("MEDIUM") // CRITICAL, HIGH, MEDIUM, LOW
+  affectedPart    String
+  confidenceScore Float    @default(0.90)
+  liability       String   @default("SUPPLIER_FACTORY") // LOGISTICS_CARRIER, SUPPLIER_FACTORY, PACKAGING_DESIGN, CUSTOMER_MISUSE
+  rootCause       String
+  actionRequired  String
+  focusX          Float    @default(50.0) // % X coordinate on image
+  focusY          Float    @default(50.0) // % Y coordinate on image
+  createdAt       DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  review  Review? @relation(fields: [reviewId], references: [id], onDelete: SetNull)
 }

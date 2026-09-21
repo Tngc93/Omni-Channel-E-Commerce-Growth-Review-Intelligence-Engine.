@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding Real-World Amazon & Hepsiburada E-Commerce Catalog...');
 
+  await prisma.visualEvidence.deleteMany();
   await prisma.growthHypothesis.deleteMany();
   await prisma.intelligenceInsight.deleteMany();
   await prisma.returnLog.deleteMany();
@@ -88,6 +89,36 @@ async function main() {
             estimatedMonthlyLoss: 38400.0,
             evidenceQuote: 'Başımı hafifçe çevirdiğimde Auto NC seviyeyi aniden düşürüyor, dış sesler içeri doluyor.',
             status: 'OPEN',
+          },
+        ],
+      },
+            visualEvidences: {
+        create: [
+          {
+            imageUrl: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&auto=format&fit=crop&q=80',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=200&auto=format&fit=crop&q=80',
+            damageCategory: 'Ergonomi & Malzeme Kusuru',
+            severity: 'HIGH',
+            affectedPart: 'Kafa Bandı Tepe Süngeri (Cushion Pad)',
+            confidenceScore: 0.94,
+            liability: 'SUPPLIER_FACTORY',
+            rootCause: 'Dolgu malzemesi yoğunluğunun (foam density) yetersiz olması ve dar genişlik nedeniyle tepe basıncının dağıtılamaması.',
+            actionRequired: 'Tedarikçi kalite güvence revizyonu: 45D bellek köpük ve 32mm genişlik revizyonu talep et.',
+            focusX: 50.0,
+            focusY: 18.0,
+          },
+          {
+            imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&auto=format&fit=crop&q=80',
+            damageCategory: 'Kargo / Taşıma Hasarı',
+            severity: 'MEDIUM',
+            affectedPart: 'Sağ Kulaklık Dış Kaplama Kabuğu (Right Ear Cup)',
+            confidenceScore: 0.88,
+            liability: 'LOGISTICS_CARRIER',
+            rootCause: 'Amazon FBA dış koli sıkışması ve iç blister ambalaj korumasının darbe sönümleme eksikliği.',
+            actionRequired: 'FBA kargo hasar tazminat dosyası aç ($420 birim bedel talep et).',
+            focusX: 72.0,
+            focusY: 60.0,
           },
         ],
       },
@@ -187,6 +218,36 @@ async function main() {
           },
         ],
       },
+      visualEvidences: {
+        create: [
+          {
+            imageUrl: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&auto=format&fit=crop&q=80',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=200&auto=format&fit=crop&q=80',
+            damageCategory: 'Üretim & Kaplama Kusuru',
+            severity: 'CRITICAL',
+            affectedPart: 'İç Pişirme Sepeti Taban Izgarası (PTFE Teflon Mesh)',
+            confidenceScore: 0.97,
+            liability: 'SUPPLIER_FACTORY',
+            rootCause: 'Sepet kaynak köşelerinde PTFE astar yapışma kürleme sıcaklığı hatası; bulaşık deterjanıyla temas anında pul pul dökülme.',
+            actionRequired: 'Üreticiye parça başı $18.50 chargeback cezası ve parti geri çağırma uyarısı gönder.',
+            focusX: 48.0,
+            focusY: 65.0,
+          },
+          {
+            imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=600&auto=format&fit=crop&q=80',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=200&auto=format&fit=crop&q=80',
+            damageCategory: 'Kalıp & Montaj Hatası',
+            severity: 'HIGH',
+            affectedPart: 'Çekmece Sürgü Rayı ve Kapak Mandalı (Drawer Lock Track)',
+            confidenceScore: 0.91,
+            liability: 'SUPPLIER_FACTORY',
+            rootCause: 'Enjeksiyon kalıbında 1.2mm tırnak payı tolerans sapması; gövdeyi çizerek kapanma direnci yaratıyor.',
+            actionRequired: 'Plastik enjeksiyon kalıp revizyon protokolü (Tooling Adjustment Report) iste.',
+            focusX: 35.0,
+            focusY: 45.0,
+          },
+        ],
+      },
       hypotheses: {
         create: [
           {
@@ -269,6 +330,36 @@ async function main() {
             estimatedMonthlyLoss: 28600.0,
             evidenceQuote: 'Arabada çantamın içine koydum, virajda devrildiğinde pipet aralığından tüm su çantama boşaldı.',
             status: 'OPEN',
+          },
+        ],
+      },
+      visualEvidences: {
+        create: [
+          {
+            imageUrl: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=600&auto=format&fit=crop&q=80',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=200&auto=format&fit=crop&q=80',
+            damageCategory: 'Ambalaj & Sızdırmazlık Tasarımı',
+            severity: 'HIGH',
+            affectedPart: 'Döner Kapak Silikon Sızdırmazlık Contası (Silicone Gasket)',
+            confidenceScore: 0.95,
+            liability: 'PACKAGING_DESIGN',
+            rootCause: 'Kapak 3 yönlü döner valf tasarımında yatay pozisyonda pipet dibinden mikro hava ve sıvı kaçağı.',
+            actionRequired: 'PDP görseli güncelleme + Ar-Ge sızdırmazlık contası revizyonu (Part No: ST-GSK-2024).',
+            focusX: 52.0,
+            focusY: 22.0,
+          },
+          {
+            imageUrl: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&auto=format&fit=crop&q=80',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200&auto=format&fit=crop&q=80',
+            damageCategory: 'Kargo / Düşme Hasarı',
+            severity: 'CRITICAL',
+            affectedPart: 'Gövde Taban Paslanmaz Çelik Taban Çemberi (Bottom Base)',
+            confidenceScore: 0.96,
+            liability: 'LOGISTICS_CARRIER',
+            rootCause: 'Kargo dağıtım sırasında yüksekten düşme sonucu tabanda derin göçük ve vakum izolasyon kaybı.',
+            actionRequired: 'Hepsijet / Kargo firmasına taşıma hasarı tazminat talebi ($48.00).',
+            focusX: 50.0,
+            focusY: 88.0,
           },
         ],
       },
@@ -357,6 +448,23 @@ async function main() {
           },
         ],
       },
+      visualEvidences: {
+        create: [
+          {
+            imageUrl: 'https://images.unsplash.com/photo-1608248597359-009df13429fa?w=600&auto=format&fit=crop&q=80',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1608248597359-009df13429fa?w=200&auto=format&fit=crop&q=80',
+            damageCategory: 'Kargo & Kırık Cam Hasarı',
+            severity: 'CRITICAL',
+            affectedPart: 'Cam Damlalık Pipeti & Şişe Boyun Yivi (Dropper Pipette)',
+            confidenceScore: 0.98,
+            liability: 'LOGISTICS_CARRIER',
+            rootCause: 'Balonlu patpat yerine ince zarf ambalaj ile gönderim; sevkiyat sırasında cam damlalık kırılmış ve serum kutuya sızmış.',
+            actionRequired: 'Lojistik merkezine çift katmanlı havalı balonlu ambalaj zorunluluğu ve kargo hasar talebi ($11.50).',
+            focusX: 48.0,
+            focusY: 30.0,
+          },
+        ],
+      },
       hypotheses: {
         create: [
           {
@@ -439,6 +547,23 @@ async function main() {
             estimatedMonthlyLoss: 31200.0,
             evidenceQuote: 'Etikete baktım Mısır üretimi yazıyor, bel ölçüsü en az 1 beden dar.',
             status: 'OPEN',
+          },
+        ],
+      },
+            visualEvidences: {
+        create: [
+          {
+            imageUrl: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&auto=format&fit=crop&q=80',
+            damageCategory: 'Tekstil / Kalıp & Beden Sapması',
+            severity: 'HIGH',
+            affectedPart: 'Bel Kemeri & Basen Dikiş Payı (Waistband & Inseam)',
+            confidenceScore: 0.92,
+            liability: 'SUPPLIER_FACTORY',
+            rootCause: 'Bangladeş fabrikası üretim partisinde W32 etiketi basılmasına rağmen gerçek ölçümün W30 (76cm) çıkması.',
+            actionRequired: 'Üretici kalite kontrol denetimi: Seri kesim kalıplarında çekme toleranslarının yeniden kalibrasyonu.',
+            focusX: 50.0,
+            focusY: 38.0,
           },
         ],
       },

@@ -19,6 +19,7 @@ import {
   TrendingUp,
   BellRing,
   Coffee,
+  Camera,
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
@@ -32,6 +33,7 @@ export function Sidebar() {
     { label: t.nav.analytics, href: '/analytics', icon: TrendingUp },
     { label: t.nav.alerts, href: '/alerts', icon: BellRing },
     { label: t.nav.catalog, href: '/products', icon: ShoppingBag },
+    { label: t.nav.visualAi, href: '/visual-ai', icon: Camera },
     { label: t.nav.competitors, href: '/competitors', icon: Swords },
     { label: t.nav.hypotheses, href: '/hypotheses', icon: Lightbulb },
     { label: t.nav.personaChat, href: '/persona-chat', icon: MessageSquareQuote },
